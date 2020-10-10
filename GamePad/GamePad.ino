@@ -67,12 +67,12 @@ void loop() {
 		}
 		{
 			arduboy.setCursor(0, 0);
-			if (arduboy.currentButtonState & UP_BUTTON) { arduboy.print("U,"); }
-			if (arduboy.currentButtonState & DOWN_BUTTON) { arduboy.print("D,"); }
-			if (arduboy.currentButtonState & LEFT_BUTTON) { arduboy.print("L,"); }
-			if (arduboy.currentButtonState & RIGHT_BUTTON) { arduboy.print("R,"); }
-			if (arduboy.currentButtonState & A_BUTTON) { arduboy.print("A,"); }
-			if (arduboy.currentButtonState & B_BUTTON) { arduboy.print("B,"); }
+			if (arduboy.currentButtonState & UP_BUTTON) { arduboy.print("U + "); }
+			if (arduboy.currentButtonState & DOWN_BUTTON) { arduboy.print("D + "); }
+			if (arduboy.currentButtonState & LEFT_BUTTON) { arduboy.print("L + "); }
+			if (arduboy.currentButtonState & RIGHT_BUTTON) { arduboy.print("R + "); }
+			if (arduboy.currentButtonState & A_BUTTON) { arduboy.print("A + "); }
+			if (arduboy.currentButtonState & B_BUTTON) { arduboy.print("B + "); }
 		}
 
 		arduboy.display();

@@ -44,6 +44,7 @@ void loop() {
 		//!< [896(=128x7)] ... [1023]
 		//!< ---------------------------------------------------
 
+#if 1
 		//!< (0 - 7 s–Ú) ¶ã8x8‚ÉŽOŠpŒ`‚ð•`‰æ‚·‚é
 		//!< *-------
 		//!< **------
@@ -62,27 +63,34 @@ void loop() {
 		Buffer[6] = 0xc0; //!< 1100 0000
 		Buffer[7] = 0x80; //!< 1000 0000
 
+		constexpr auto Width = Arduboy2::width();
 		//!< (8 - 15 s–Ú) ƒ‰ƒ“ƒ_ƒ€
-		for (auto i = 0; i < 128; ++i) { Buffer[i + 128] = rand() % 0xff; }
+		for (auto i = 0; i < Width; ++i) { Buffer[i + Width] = rand() % 0xff; }
 
 		//!< (16 - 23 s–Ú) ”’“h‚è
-		for (auto i = 0; i < 128; ++i) { Buffer[i + 256] = 0xff; }
+		for (auto i = 0; i < Width; ++i) { Buffer[i + Width * 2] = 0xff; }
 
 		//!< (24 - 31 s–Ú) •“h‚è
-		for (auto i = 0; i < 128; ++i) { Buffer[i + 384] = 0x00; }
+		for (auto i = 0; i < Width; ++i) { Buffer[i + Width * 3] = 0x00; }
 
 		//!< (32 - 39 s–Ú) Žs¼–Í—l
-		for (auto i = 0; i < 128; ++i) { Buffer[i + 512] = (i & 1) ? 0xaa : 0x55; } //!< 1010 1010 or 0101 0101
+		for (auto i = 0; i < Width; ++i) { Buffer[i + Width * 4] = (i & 1) ? 0xaa : 0x55; } //!< 1010 1010 or 0101 0101
 		
 		//!< (40 - 47 s–Ú) ‰¡ŽÈ
-		for (auto i = 0; i < 128; ++i) { Buffer[i + 640] = 0xaa; } //!< 1010 1010
+		for (auto i = 0; i < Width; ++i) { Buffer[i + Width * 5] = 0xaa; } //!< 1010 1010
 
 		//!< (48 - 55 s–Ú) cŽÈ
-		for (auto i = 0; i < 128; ++i) { Buffer[i + 768] = (i & 1) ? 0xff : 0x00; } //!< 1111 1111 or 0000 0000
+		for (auto i = 0; i < Width; ++i) { Buffer[i + Width * 6] = (i & 1) ? 0xff : 0x00; } //!< 1111 1111 or 0000 0000
 
 		//!< (56 - 63 s–Ú)
-		for (auto i = 0; i < 128; ++i) { Buffer[i + 896] = (i > 63) ? 0xf0 : 0x0f; } //!< 1111 0000 or 0000 1111
+		for (auto i = 0; i < Width; ++i) { Buffer[i + Width * 7] = (i > Width / 2) ? 0xf0 : 0x0f; } //!< 1111 0000 or 0000 1111
 
 		arduboy.display();
+#else
+		//!< ƒ‰ƒ“ƒ_ƒ€
+		for (auto i = 0; i < Arduboy2::width() * Arduboy2::height() / 8; ++i) {
+			arduboy.paint8Pixels(rand() % 0xff);
+		}
+#endif
 	}
 }

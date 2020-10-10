@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="FrameBuffer.ino" />
+    <None Include="Beep.ino" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="__vm\.FrameBuffer.vsarduino.h">
+    <ClInclude Include="__vm\.Beep.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
