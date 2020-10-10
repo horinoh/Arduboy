@@ -38,3 +38,45 @@
 ## [エミュレータ](https://github.com/felipemanga/ProjectABE)
 * IDEから、スケッチ - コンパイルしたバイナリを出力 - XXX.ino.arduino_leonardo.hex というファイルができるので、これをProjectABEにドラッグドロップ
 * XXX.ino.arduino_leonardo..hexが更新されると自動的に再読み込みしてくれるので、一度起動してしまえばそのままで良い
+
+## ハードウエア
+* 上を押したまま電源を入れるとフラッシュライトモード
+    * やめるには再起動
+    * スケッチのアップロードが上手くいかない時にも使う
+* Bを押したまま電源を入れるとシステムコントロールモード (LEDが青になる)
+    * Bはホールドしておく必要がある
+    * 上でオーディオを有効化(LEDが一回緑になる)
+    * 下でオーディオを無効化(LEDが一回赤になる)
+
+<!--
+TODO
+    スプライト
+    LED
+        digitalWriteRGB(RGB_ON, RGB_OFF, RGB_OFF);
+        digitalWriteRGB(RED_LED, RGB_ON);digitalWriteRGB(GREEN_LED, RGB_OFF);digitalWriteRGB(BLUE_LED, RGB_OFF);
+
+        setRGBled(255, 0, 0);
+        setRGBled(RED_LED, 255);setRGBled(RED_GREEN, 0);setRGBled(RED_BLUE, 0);
+
+    フレームバッファ操作
+        getBuffer()
+
+    EEPROM
+        EEPROM_STORAGE_SPACE_START 以降がアプリから使用可能
+        	arduboy.print("\nEEPROM = ");
+			arduboy.print(EEPROM_STORAGE_SPACE_START+1);
+			arduboy.print(" = ");
+			arduboy.print(EEPROM.read(EEPROM_STORAGE_SPACE_START));
+    
+    オーディオ
+        Arduboy2Audio::enabled(),on(),off(),toggle()
+        
+        // BeepPin1(推奨) : 周波数は 15.26Hz から 1000000Hz
+        BeepPin1 beep1;
+        setup(){ beep1.begin(); }
+        loop(){ beep1.timer(); beep.tone(beep.freq(1000), 100); }
+        
+        // BeepPin2 : 周波数は 61.04Hz から 15625Hz
+
+
+-->

@@ -21,6 +21,9 @@ void loop() {
 	if (arduboy.nextFrame()) {
 		arduboy.clear();
 
+		//!< Need to use justPressed(), etc
+		arduboy.pollButtons();
+
 		{
 			arduboy.drawFastHLine(0, 0, Arduboy2::width() - 1, WHITE);
 			arduboy.drawFastHLine(0, Arduboy2::height() - 1, Arduboy2::width() - 1, WHITE);
@@ -58,6 +61,18 @@ void loop() {
 			Position.x = Arduboy2::width() - 1 - 32;
 			arduboy.pressed(A_BUTTON) ? arduboy.fillCircle(Position.x - Spacing, Position.y, Radius, WHITE) : arduboy.drawCircle(Position.x - Spacing, Position.y, Radius, WHITE);
 			arduboy.pressed(B_BUTTON) ? arduboy.fillCircle(Position.x + Spacing, Position.y, Radius, WHITE) : arduboy.drawCircle(Position.x + Spacing, Position.y, Radius, WHITE);
+
+			if (arduboy.justPressed(A_BUTTON)) { arduboy.invert(true); }
+			if (arduboy.justReleased(A_BUTTON)) { arduboy.invert(false); }
+		}
+		{
+			arduboy.setCursor(0, 0);
+			if (arduboy.currentButtonState & UP_BUTTON) { arduboy.print("U,"); }
+			if (arduboy.currentButtonState & DOWN_BUTTON) { arduboy.print("D,"); }
+			if (arduboy.currentButtonState & LEFT_BUTTON) { arduboy.print("L,"); }
+			if (arduboy.currentButtonState & RIGHT_BUTTON) { arduboy.print("R,"); }
+			if (arduboy.currentButtonState & A_BUTTON) { arduboy.print("A,"); }
+			if (arduboy.currentButtonState & B_BUTTON) { arduboy.print("B,"); }
 		}
 
 		arduboy.display();
