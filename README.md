@@ -12,6 +12,7 @@
     ArdVoice
     ATMlib
     Arduboy-TinyFont
+    FixedPoints
     ~~~
 ### ボード
 * ファイル - 環境設定 - 追加のボードマネージャのURLに以下を記述
@@ -48,10 +49,15 @@
     * 上でオーディオを有効化(LEDが一回緑になる)
     * 下でオーディオを無効化(LEDが一回赤になる)
 
+----
+* This software includes the work that is distributed in the Apache License 2.9
 <!--
 TODO
     スプライト
     
+    固定小数点
+        https://github.com/Pharap/FixedPointsArduino
+
     LED
         digitalWriteRGB(RGB_ON, RGB_OFF, RGB_OFF);
         digitalWriteRGB(RED_LED, RGB_ON);digitalWriteRGB(GREEN_LED, RGB_OFF);digitalWriteRGB(BLUE_LED, RGB_OFF);

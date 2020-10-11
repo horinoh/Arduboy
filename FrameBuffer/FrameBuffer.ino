@@ -21,6 +21,8 @@ void loop() {
 	if (arduboy.nextFrame()) {
 		arduboy.clear();
 		
+		const auto Start = micros();
+
 		auto Buffer = arduboy.getBuffer();
 
 		//!< ---------------------------------------------------
@@ -84,6 +86,18 @@ void loop() {
 
 		//!< (56 - 63 s–Ú)
 		for (auto i = 0; i < Width; ++i) { Buffer[i + Width * 7] = (i > Width / 2) ? 0xf0 : 0x0f; } //!< 1111 0000 or 0000 1111
+
+		const auto End = micros();
+		{
+			arduboy.setCursor(9, 0);
+
+			arduboy.print("CPU=");
+			arduboy.print(arduboy.cpuLoad());
+			arduboy.print("%,");
+
+			arduboy.print(End - Start);
+			arduboy.print("usec");
+		}
 
 		arduboy.display();
 #else
