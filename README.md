@@ -55,9 +55,6 @@
 TODO
     スプライト
     
-    固定小数点
-        https://github.com/Pharap/FixedPointsArduino
-
     LED
         digitalWriteRGB(RGB_ON, RGB_OFF, RGB_OFF);
         digitalWriteRGB(RED_LED, RGB_ON);digitalWriteRGB(GREEN_LED, RGB_OFF);digitalWriteRGB(BLUE_LED, RGB_OFF);
