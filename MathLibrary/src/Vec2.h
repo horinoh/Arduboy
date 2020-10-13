@@ -10,6 +10,8 @@
 #endif
 
 #include <Common.h>
+#include <FixedPoints.h>
+#include <FixedPointsCommon.h>
 
 template<typename T = SQ15x16>
 class Vec2
@@ -29,7 +31,8 @@ public:
 	T Length() const { return T(sqrt(static_cast<float>(LengthSquared))); } //!< TODO ˆê’Ufloat‚É‚µ‚Äsqrt‚ðŽg—p‚µ‚Ä‚¢‚é
 	Vec2<T> Normalize() const { return *this / Length(); }
 
-	operator const char*() { return (String(static_cast<float>(m[X])) + ", " + String(static_cast<float>(m[Y]))).c_str(); }
+	String ToString() const { return String(static_cast<float>(m[X])) + ", " + String(static_cast<float>(m[Y])); }
+	operator const char*() const { return ToString().c_str(); }
 
 private:
 	T m[2];
@@ -41,9 +44,6 @@ template<typename T> Vec2<T> operator-(const Vec2<T>& lhs, const Vec2<T>& rhs) {
 template<typename T> Vec2<T> operator*(const Vec2<T>& lhs, const T& rhs) { return Vec2<T>(lhs[X] * rhs, lhs[Y] * rhs); }
 template<typename T> Vec2<T> operator*(const T& lhs, const Vec2<T>& rhs) { return Vec2<T>(lhs * rhs[X], lhs * rhs[Y]); }
 template<typename T> Vec2<T> operator/(const Vec2<T>& lhs, const T& rhs) { return Vec2<T>(lhs[X] / rhs, lhs[Y] / rhs); }
-
-//TODO
-//Normalize
 
 #endif
 

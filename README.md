@@ -36,6 +36,14 @@
     * IDE に Arduino 1.6/1.8 を選択する
     * Board に Arduino Leonardo を選択する
 
+### ライブラリ
+* ライブラリの作成
+    * Arduino Library Projectで作成、ここではXXXとする
+    * ファイルの追加をする場合は、srcフォルダ以下に配置されるように追加する
+* ライブラリを使う側のプロジェクトでやること
+    * ソリューションを右クリック - Add - Existing Project... - XXX.vcxitems を追加する
+    * Referencesを右クリック - Add Reference... - XXXにチェックを入れる
+
 ## [エミュレータ](https://github.com/felipemanga/ProjectABE)
 * IDEから、スケッチ - コンパイルしたバイナリを出力 - XXX.ino.arduino_leonardo.hex というファイルができるので、これをProjectABEにドラッグドロップ
 * XXX.ino.arduino_leonardo..hexが更新されると自動的に再読み込みしてくれるので、一度起動してしまえばそのままで良い

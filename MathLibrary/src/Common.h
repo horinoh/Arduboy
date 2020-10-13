@@ -9,9 +9,6 @@
 	#include "WProgram.h"
 #endif
 
-#include <FixedPoints.h>
-#include <FixedPointsCommon.h>
-
 static constexpr uint8_t X = 0;
 static constexpr uint8_t Y = 1;
 static constexpr uint8_t Z = 2;

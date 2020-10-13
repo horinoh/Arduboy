@@ -24,8 +24,5 @@
 
 #include <Quat.h>
 
-//!< (追加先の)ソリューション右クリック - Add - Existing Project... - MathLibrary.vcxitems を追加する
-//!< References右クリック - Add Reference... - MathLibraryにチェック
-
 #endif
 
