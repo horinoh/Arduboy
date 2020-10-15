@@ -22,17 +22,15 @@ public:
 
 	T& operator[](const uint8_t i) { return m[i]; }
 	const T& operator[](const uint8_t i) const { return m[i]; }
-	T& x() { return m[X]; }
 	const T& x() const { return m[X]; }
-	T& y() { return m[Y]; }
 	const T& y() const { return m[Y]; }
 
-	T LengthSquared() const { return m[X] * m[X] + m[Y] * m[Y]; }
-	T Length() const { return T(sqrt(static_cast<float>(LengthSquared))); } //!< TODO ˆê’Ufloat‚É‚µ‚Äsqrt‚ðŽg—p‚µ‚Ä‚¢‚é
+	T LengthSquared() const { return Dot(*this, *this); }
+	T Length() const { return T(sqrt(static_cast<float>(LengthSquared()))); } //!< TODO ˆê’Ufloat‚É‚µ‚Äsqrt‚ðŽg—p‚µ‚Ä‚¢‚é
 	Vec2<T> Normalize() const { return *this / Length(); }
 
-	String ToString() const { return String(static_cast<float>(m[X])) + ", " + String(static_cast<float>(m[Y])); }
-	operator const char*() const { return ToString().c_str(); }
+	String ToString() const { return String(static_cast<float>(m[X])) + "," + String(static_cast<float>(m[Y])); }
+	operator const String() const { return ToString(); }
 
 private:
 	T m[2];

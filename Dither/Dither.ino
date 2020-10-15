@@ -13,8 +13,6 @@ Arduboy2 arduboy;
 // M_2n = 1/(2n)^2 * [4 * M_n + 0, 4 * M_n + 2] 
 //		             [4 * M_n + 3, 4 * M_n + 1]
 
-// examples
-
 // [2 x 2]
 // 0 2
 // 3 1
@@ -35,15 +33,21 @@ Arduboy2 arduboy;
 // 12 44  4 36 12 44  4 36 + 3 3 3 3 1 1 1 1 = 15 47  7 39 13 45  5 37
 // 60 28 52 20 60 28 52 20 + 3 3 3 3 1 1 1 1 = 63 31 55 23 61 29 53 21
 
+//!< C++11‚Å‚ÍconstexorŠÖ”‚Íreturn‚Ìˆê•¶‚Ì‚Ý‚Å‚È‚¢‚Æ‚¢‚¯‚È‚¢‚Ì‚Å’ˆÓ
 constexpr uint8_t Bayer(const uint8_t i, const uint8_t j, const uint8_t n)
 {
-	return (n > 2 ? (Bayer(i % (n >> 1), j % (n >> 1), n >> 1) << 2) : 0) + i / (n >> 1) | ((((i / (n >> 1)) & 1) ? !(j / (n >> 1)) : (j / (n >> 1))) << 1);
+	//!< [ 4 * M_n, 4 * M_n ] •”
+	//!< [ 4 * M_n, 4 * M_n ]
+	return (n > 2 ? (Bayer(i % (n >> 1), j % (n >> 1), n >> 1) << 2) : 0)
+		//!< [ 0, 2 ] •”
+		//!< [ 3, 1 ]
+		+ i / (n >> 1) | ((((i / (n >> 1)) & 1) ? !(j / (n >> 1)) : (j / (n >> 1))) << 1);
 }
 
 constexpr uint8_t N = 2 * 2;
 SQ15x16 ThresholdMap[N][N];
 
-float Tone = 0.5f;
+auto Tone = SQ15x16(0.5f);
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -56,15 +60,6 @@ void setup() {
 			ThresholdMap[i][j] = static_cast<float>(Bayer(i, j, N)) / (N * N);
 		}
 	}
-
-	//arduboy.setCursor(0, 0);
-	//for (uint8_t i = 0; i < N; ++i) {
-	//	for (uint8_t j = 0; j < N; ++j) {
-	//		arduboy.print(static_cast<float>(ThresholdMap[i][j])); arduboy.print(",");
-	//	}
-	//	arduboy.print("\n");
-	//}
-	//arduboy.display();
 }
 
 // the loop function runs over and over again until power down or reset
@@ -73,9 +68,9 @@ void loop() {
 		arduboy.clear();
 		arduboy.pollButtons();
 
-		if (arduboy.pressed(UP_BUTTON)) { Tone += 0.01f; }
-		if (arduboy.pressed(DOWN_BUTTON)) { Tone -= 0.01f; }
-		Tone = max(min(Tone, 1.0f), 0.0f);
+		if (arduboy.pressed(UP_BUTTON)) { Tone += SQ15x16(0.01f); }
+		if (arduboy.pressed(DOWN_BUTTON)) { Tone -=  SQ15x16(0.01f); }
+		Tone = max(min(Tone, SQ15x16(1.0f)), SQ15x16(0.0f));
 		
 		{
 			arduboy.setCursor(0, Arduboy2::height() - 2 * (Arduboy2::getCharacterHeight() - Arduboy2::getLineSpacing()));
@@ -83,15 +78,30 @@ void loop() {
 			arduboy.print(N * N);
 			arduboy.print("\n");
 			arduboy.print("Tone=");
-			arduboy.print(Tone);
+			arduboy.print(static_cast<float>(Tone));
 		}
 
-		for (uint8_t i = 0; i < Arduboy2::height() >> 1; ++i) {
-			for (uint8_t j = 0; j < Arduboy2::width() >> 1; ++j) {
-				arduboy.drawPixel(j, i, static_cast<float>(ThresholdMap[i % N][j % N]) < Tone ? WHITE : BLACK);
+		constexpr auto Denom = SQ15x16(1.0f / static_cast<float>(Arduboy2::width()));
+#if 0
+		for (uint8_t i = 0; i < Arduboy2::height(); ++i) {
+			for (uint8_t j = 0; j < Arduboy2::width(); ++j) {
+				arduboy.drawPixel(j, i, ThresholdMap[i % N][j % N] < Tone ? WHITE : BLACK);
+				//arduboy.drawPixel(j, i, ThresholdMap[i % N][j % N] < SQ15x16(static_cast<float>(j) * Denom) ? WHITE : BLACK);
+	}
+		}
+		arduboy.display();
+#else
+		for (auto i = 0; i < Arduboy2::height() >> 3; ++i) {
+			for (auto j = 0; j < Arduboy2::width(); ++j) {
+				uint8_t p = 0;
+				for (auto k = 0; k < 8; ++k) {
+					p |= (ThresholdMap[((i << 3) + k) % N][j % N] < Tone ? 1 : 0) << k;
+					//p |= (ThresholdMap[((i << 3) + k) % N][j % N] < SQ15x16(static_cast<float>(j) * Denom) ? 1 : 0) << k;
+				}
+				arduboy.paint8Pixels(p);
 			}
 		}
-
-		arduboy.display();
+#endif
+	
 	}
 }
