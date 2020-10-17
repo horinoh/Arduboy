@@ -24,9 +24,10 @@ public:
 	Vec2<T>& operator[](const uint8_t i) { return m[i]; }
 	const Vec2<T>& operator[](const uint8_t i) const { return m[i]; }
 
-	String ToString() const { return m[0].ToString() + ",\n" + m[1].ToString(); }
+	const String ToString() const { return m[0].ToString() + ",\n" + m[1].ToString(); }
 	operator const String() const { return ToString(); }
 
+	Mat2<T> Transpose() const { return { { m[0][0], m[1][0] }, { m[0][1], m[1][1] } }; }
 	T Determinant() const { return m[0][0] * m[1][1] - m[0][1] * m[1][0]; }
 	Mat2<T> Inverse(const T& Det) const { return Mat2<T>({ m[1][1], -m[0][1] }, { -m[1][0], m[0][0] }) / Det; }
 

@@ -25,19 +25,29 @@ public:
 	Vec3<T>& operator[](const uint8_t i) { return m[i]; }
 	const Vec3<T>& operator[](const uint8_t i) const { return m[i]; }
 
-	String ToString() const { return m[0].ToString() + ",\n" + m[1].ToString() + ",\n" + m[2].ToString(); }
+	const String ToString() const { return m[0].ToString() + ",\n" + m[1].ToString() + ",\n" + m[2].ToString(); }
 	operator const String() const { return ToString(); }
 
+	Mat3<T> Transpose() const { return { { m[0][0], m[1][0], m[2][0] }, { m[0][1], m[1][1], m[2][1] }, { m[0][2], m[1][2], m[2][2] } }; }
 	T Determinant() const {
 		return m[0][0] * Mat2<T>({ m[1][1], m[1][2] }, { m[2][1], m[2][2] }).Determinant() 
 			- m[1][0] * Mat2<T>({ m[0][1], m[0][2] }, { m[2][1], m[2][2] }).Determinant() 
-			+ m[2][0] * Mat2<T>({ m[1][1], m[1][2] }, { m[1][1], m[1][2] }).Determinant();
+			+ m[2][0] * Mat2<T>({ m[0][1], m[0][2] }, { m[1][1], m[1][2] }).Determinant();
 	}
 	Mat3<T> Inverse(const T& Det) const {
-		//Mat2<T>({ m[][],m[][] }, { m[][],m[][] }).Determinant()
-		return Mat3<T>({ Mat2<T>({m[1][1], m[1][2]}, {m[2][1], m[2][2]}).Determinant(), -Mat2<T>({m[0][1], m[0][2]},{m[2][1],m[2][2]}).Determinant(), Mat2<T>({m[0][1],m[0][2]}, {m[1][1],m[1][2]}).Determinant() },
-			{ -(m[1][0] * m[2][2] - m[2][0] * m[1][2]),  m[0][0] * m[2][2] - m[2][0] * m[0][2], -(m[0][0] * m[1][2] - m[1][0] * m[0][2]) },
-			{ m[1][0] * m[2][1] - m[2][0] * m[1][1], -(m[0][0] * m[2][1] - m[2][0] * m[0][1]), m[0][0] * m[1][1] - m[1][0] * m[0][1] }) / Det;
+		const auto c0 = Vec3<>({ 
+			 Mat2<T>({ m[1][1], m[1][2]}, { m[2][1], m[2][2] }).Determinant(),
+			-Mat2<T>({ m[0][1], m[0][2]}, { m[2][1], m[2][2] }).Determinant(), 
+			 Mat2<T>({ m[0][1], m[0][2]}, { m[1][1], m[1][2] }).Determinant() });
+		const auto c1 = Vec3<>({
+			-Mat2<T>({ m[1][0], m[1][2] }, { m[2][0], m[2][2] }).Determinant(), 
+			 Mat2<T>({ m[0][0], m[0][2] }, { m[2][0], m[2][2] }).Determinant(), 
+			-Mat2<T>({ m[0][0], m[0][2] }, { m[1][0], m[1][2] }).Determinant() });
+		const auto c2 = Vec3<>({ 
+			 Mat2<T>({ m[1][0], m[1][1] }, { m[2][0], m[2][1] }).Determinant(), 
+			-Mat2<T>({ m[0][0], m[0][1] }, { m[2][0], m[2][1] }).Determinant(),
+			 Mat2<T>({ m[0][0], m[0][1] }, { m[1][0], m[1][1] }).Determinant() });
+		return Mat3<>({ c0, c1, c2 }) / Det;
 	}
 
 	static Mat3<T> Identity() { return { { 1.0, 0.0, 0.0 }, { 0.0, 1.0, 0.0 }, { 0.0, 0.0, 1.0 } }; }

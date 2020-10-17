@@ -31,7 +31,7 @@ public:
 	T Length() const { return T(sqrt(static_cast<float>(LengthSquared()))); } //!< TODO ˆê’Ufloat‚É‚µ‚Äsqrt‚ðŽg—p‚µ‚Ä‚¢‚é
 	Vec3<T> Normalize() const { return *this / Length(); }
 
-	String ToString() const {
+	const String ToString() const {
 		return String(static_cast<float>(m[Component::X])) + "," + String(static_cast<float>(m[Component::Y])) + "," + String(static_cast<float>(m[Component::Z]));
 	}
 	operator const String() const { return ToString(); }
