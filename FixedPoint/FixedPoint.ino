@@ -10,25 +10,25 @@
 
 Arduboy2 arduboy;
 
-#define SIZE_VALUE(A, B) arduboy.print("Size="); arduboy.print(sizeof(A)); arduboy.print("\n");\
+#define SIZE_VALUE(A, B) arduboy.print("Size="); arduboy.println(sizeof(A));\
 arduboy.print("A="); arduboy.print(static_cast<float>(A)); arduboy.print(",");\
-arduboy.print("B="); arduboy.print(static_cast<float>(B)); arduboy.print("\n");
+arduboy.print("B="); arduboy.println(static_cast<float>(B));
 
-#define ADD_SUB(A, B) arduboy.print("A+B="); arduboy.print(static_cast<float>(A + B)); arduboy.print("\n");\
+#define ADD_SUB(A, B) arduboy.print("A+B="); arduboy.println(static_cast<float>(A + B));\
 arduboy.print("A-B="); arduboy.print(static_cast<float>(A - B)); arduboy.print(",");\
-arduboy.print("B-A="); arduboy.print(static_cast<float>(B - A)); arduboy.print("\n");
+arduboy.print("B-A="); arduboy.println(static_cast<float>(B - A));
 
-#define MUL_DIV(A, B) arduboy.print("A*B="); arduboy.print(static_cast<float>(A * B)); arduboy.print("\n");\
+#define MUL_DIV(A, B) arduboy.print("A*B="); arduboy.println(static_cast<float>(A * B));\
 arduboy.print("A/B="); arduboy.print(static_cast<float>(A / B)); arduboy.print(",");\
-arduboy.print("B/A="); arduboy.print(static_cast<float>(B / A)); arduboy.print("\n");
+arduboy.print("B/A="); arduboy.println(static_cast<float>(B / A));
 
-#define FLOOR_CEIL(A) arduboy.print("floorFixed(A)="); arduboy.print(static_cast<float>(floorFixed(A))); arduboy.print("\n");\
-arduboy.print("ceilFixed(A)="); arduboy.print(static_cast<float>(ceilFixed(A))); arduboy.print("\n");
+#define FLOOR_CEIL(A) arduboy.print("floorFixed(A)="); arduboy.println(static_cast<float>(floorFixed(A)));\
+arduboy.print("ceilFixed(A)="); arduboy.println(static_cast<float>(ceilFixed(A)));
 
-#define ROUND_TRUNC(A) arduboy.print("roundFixed(A)="); arduboy.print(static_cast<float>(roundFixed(A))); arduboy.print("\n");\
-arduboy.print("truncFixed(A)="); arduboy.print(static_cast<float>(truncFixed(A))); arduboy.print("\n");
+#define ROUND_TRUNC(A) arduboy.print("roundFixed(A)="); arduboy.println(static_cast<float>(roundFixed(A)));\
+arduboy.print("truncFixed(A)="); arduboy.println(static_cast<float>(truncFixed(A)));
 
-#define INTEGER(A) arduboy.print("getInteger(A)="); arduboy.print(A.getInteger()); arduboy.print("\n");
+#define INTEGER(A) arduboy.print("getInteger(A)="); arduboy.println(A.getInteger());
 
 // the setup function runs once when you press reset or power the board
 void setup() {

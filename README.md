@@ -70,8 +70,16 @@
 * This software includes the work that is distributed in the Apache License 2.9
 <!--
 TODO
+    Math
+        四元数
+        テーブル使用サインコサイン
+        DistanceFunctions
+        ParametericSurface
+
     スプライト
-    
+        コンバーターの使用
+        表示
+
     LED
         digitalWriteRGB(RGB_ON, RGB_OFF, RGB_OFF);
         digitalWriteRGB(RED_LED, RGB_ON);digitalWriteRGB(GREEN_LED, RGB_OFF);digitalWriteRGB(BLUE_LED, RGB_OFF);

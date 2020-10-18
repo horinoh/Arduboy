@@ -75,8 +75,7 @@ void loop() {
 		{
 			arduboy.setCursor(0, Arduboy2::height() - 2 * (Arduboy2::getCharacterHeight() - Arduboy2::getLineSpacing()));
 			arduboy.print("Steps=");
-			arduboy.print(N * N);
-			arduboy.print("\n");
+			arduboy.println(N * N);
 			arduboy.print("Tone=");
 			arduboy.print(static_cast<float>(Tone));
 		}
