@@ -22,7 +22,7 @@ void loop() {
 	if (arduboy.nextFrame()) {
 		arduboy.clear();
 
-		//!< 5x7
+		//!< フォントサイズ 5x7 (Font size 5x7)
 		{
 			constexpr auto Message = "Hello World";
 			constexpr auto StrLen = strlen(Message);
@@ -34,7 +34,7 @@ void loop() {
 			arduboy.print(Message);
 		}
 
-		//!< 4x4
+		//!< フォントサイズ 4x4 (Font size 4x4)
 		{
 			constexpr auto Message = "Hello Tiny Font";
 			constexpr auto StrLen = strlen(Message);

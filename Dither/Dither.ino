@@ -33,7 +33,7 @@ Arduboy2 arduboy;
 // 12 44  4 36 12 44  4 36 + 3 3 3 3 1 1 1 1 = 15 47  7 39 13 45  5 37
 // 60 28 52 20 60 28 52 20 + 3 3 3 3 1 1 1 1 = 63 31 55 23 61 29 53 21
 
-//!< C++11‚Å‚ÍconstexorŠÖ”‚Íreturn‚Ìˆê•¶‚Ì‚Ý‚Å‚È‚¢‚Æ‚¢‚¯‚È‚¢‚Ì‚Å’ˆÓ
+//!< C++11‚Å‚ÍconstexorŠÖ”‚Íreturn‚Ìˆê•¶‚Ì‚Ý‚Å‚È‚¢‚Æ‚¢‚¯‚È‚¢‚Ì‚Å’ˆÓ (In C++11, constexpr function must be one return sentence only)
 constexpr uint8_t Bayer(const uint8_t i, const uint8_t j, const uint8_t n)
 {
 	//!< [ 4 * M_n, 4 * M_n ] •”
@@ -87,7 +87,7 @@ void loop() {
 			for (uint8_t j = 0; j < Arduboy2::width(); ++j) {
 				arduboy.drawPixel(j, i, ThresholdMap[i % N][j % N] < Tone ? WHITE : BLACK);
 				//arduboy.drawPixel(j, i, ThresholdMap[i % N][j % N] < SQ15x16(static_cast<float>(j) * Denom) ? WHITE : BLACK);
-	}
+			}
 		}
 		arduboy.display();
 #else

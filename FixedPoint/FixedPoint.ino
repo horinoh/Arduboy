@@ -42,7 +42,7 @@ void loop() {
 	if (arduboy.nextFrame()) {
 		arduboy.pollButtons();
 
-		//!< 定義されているエイリアス
+		//!< 定義されているエイリアス (Defined aliases)
 		//!< UQ4x4
 		//!< UQ8x8
 		//!< UQ16x16
@@ -147,7 +147,7 @@ void loop() {
 		}
 
 #if false
-		//!< 64bit関連は乗算、除算ができない
+		//!< 64bit関連は乗算、除算ができない (64bit version cannot multiply and division ?)
 		{
 			constexpr UQ32x32 A = 1.5;
 			constexpr UQ32x32 B = 5.25;

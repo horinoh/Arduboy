@@ -21,7 +21,7 @@ void loop() {
 	if (arduboy.nextFrame()) {
 		arduboy.clear();
 
-		//!< Need to use justPressed(), etc
+		//!< justPressed()等を使う場合には必須 (Need to use justPressed(), etc)
 		arduboy.pollButtons();
 
 		{
@@ -31,7 +31,7 @@ void loop() {
 			arduboy.drawFastVLine(Arduboy2::width() - 1, 0, Arduboy2::height() - 1, WHITE);
 		}
 
-		//!< Move cursor
+		//!< カーソルの移動 (Move cursor)
 		{
 			constexpr auto Radius = 4;
 			{
@@ -47,7 +47,7 @@ void loop() {
 			}
 		}
 
-		//!< Draw button state
+		//!< ボタン状態を描画 (Draw button state)
 		{
 			constexpr auto Radius = 8;
 			constexpr auto Spacing = Radius * 2;

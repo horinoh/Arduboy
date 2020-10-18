@@ -21,6 +21,7 @@ void loop() {
 	if (arduboy.nextFrame()) {
 		arduboy.clear();
 		
+		//const auto Start = millis();
 		const auto Start = micros();
 
 		auto Buffer = arduboy.getBuffer();
@@ -47,7 +48,7 @@ void loop() {
 		//!< ---------------------------------------------------
 
 #if 1
-		//!< (0 - 7 s–Ú) ¶ã8x8‚ÉŽOŠpŒ`‚ð•`‰æ‚·‚é
+		//!< (0 - 7 s–Ú) ¶ã8x8‚ÉŽOŠpŒ`‚ð•`‰æ‚·‚é (0-7 lines, Draw 8x8 triangle on top left)
 		//!< *-------
 		//!< **------
 		//!< ***-----
@@ -66,27 +67,28 @@ void loop() {
 		Buffer[7] = 0x80; //!< 1000 0000
 
 		constexpr auto Width = Arduboy2::width();
-		//!< (8 - 15 s–Ú) ƒ‰ƒ“ƒ_ƒ€
+		//!< (8 - 15 s–Ú) ƒ‰ƒ“ƒ_ƒ€ (8-15 lines, Random)
 		for (auto i = 0; i < Width; ++i) { Buffer[i + Width] = rand() % 0xff; }
 
-		//!< (16 - 23 s–Ú) ”’“h‚è
+		//!< (16 - 23 s–Ú) ”’“h‚è (16-23 lines, Fill white)
 		for (auto i = 0; i < Width; ++i) { Buffer[i + Width * 2] = 0xff; }
 
-		//!< (24 - 31 s–Ú) •“h‚è
+		//!< (24 - 31 s–Ú) •“h‚è (24-31 lines, Fill black)
 		for (auto i = 0; i < Width; ++i) { Buffer[i + Width * 3] = 0x00; }
 
-		//!< (32 - 39 s–Ú) Žs¼–Í—l
+		//!< (32 - 39 s–Ú) Žs¼–Í—l (32-39 lines, Checkered pattern)
 		for (auto i = 0; i < Width; ++i) { Buffer[i + Width * 4] = (i & 1) ? 0xaa : 0x55; } //!< 1010 1010 or 0101 0101
 		
-		//!< (40 - 47 s–Ú) ‰¡ŽÈ
+		//!< (40 - 47 s–Ú) ‰¡ŽÈ (40-47 lines, Horizontal stripes)
 		for (auto i = 0; i < Width; ++i) { Buffer[i + Width * 5] = 0xaa; } //!< 1010 1010
 
-		//!< (48 - 55 s–Ú) cŽÈ
+		//!< (48 - 55 s–Ú) cŽÈ (48-55 lines, Virtical stripes)
 		for (auto i = 0; i < Width; ++i) { Buffer[i + Width * 6] = (i & 1) ? 0xff : 0x00; } //!< 1111 1111 or 0000 0000
 
-		//!< (56 - 63 s–Ú)
+		//!< (56 - 63 s–Ú) (56-63 lines, ...)
 		for (auto i = 0; i < Width; ++i) { Buffer[i + Width * 7] = (i > Width / 2) ? 0xf0 : 0x0f; } //!< 1111 0000 or 0000 1111
 
+		//const auto End = millis();
 		const auto End = micros();
 		{
 			arduboy.setCursor(9, 0);
@@ -96,12 +98,13 @@ void loop() {
 			arduboy.print("%,");
 
 			arduboy.print(End - Start);
+			//arduboy.print("msec");
 			arduboy.print("usec");
 		}
 
 		arduboy.display();
 #else
-		//!< ƒ‰ƒ“ƒ_ƒ€
+		//!< ƒ‰ƒ“ƒ_ƒ€ (Random)
 		for (auto i = 0; i < Arduboy2::width() * Arduboy2::height() / 8; ++i) {
 			arduboy.paint8Pixels(rand() % 0xff);
 		}
