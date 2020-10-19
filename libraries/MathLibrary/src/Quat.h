@@ -29,7 +29,7 @@ public:
 	const T& W() const { return m[Component::W]; }
 
 	T LengthSquared() const { return Dot(*this, *this); }
-	T Length() const { return T(sqrt(static_cast<float>(LengthSquared))); } //!< TODO ˆê’Ufloat‚É‚µ‚Äsqrt‚ðŽg—p‚µ‚Ä‚¢‚é
+	T Length() const { return T(sqrt(static_cast<float>(LengthSquared))); } //!< #TODO ˆê’Ufloat‚É‚µ‚Äsqrt‚ðŽg—p‚µ‚Ä‚¢‚é
 	Quat<T> Normalize() const { return *this / Length(); }
 
 	String ToString() const { 
@@ -37,30 +37,30 @@ public:
 	}
 	operator const String() const { return ToString(); }
 
-	static Quat<T> Identity() { return { 0.0, 0.0, 0.0, 1.0f }; }
+	static constexpr Quat<T> Identity() { return { 0.0f, 0.0f, 0.0f, 1.0f }; }
 
 private:
 	T m[4];
 };
 
-template<typename T> T Dot(const Quat<T>& lhs, const Quat<T>& rhs) { 
+template<typename T> constexpr T Dot(const Quat<T>& lhs, const Quat<T>& rhs) {
 	using namespace Component;
 	return lhs[X] * rhs[X] + lhs[Y] * rhs[Y] + lhs[Z] * rhs[Z] + lhs[W] * rhs[W];
 }
-template<typename T> Quat<T> operator+(const Quat<T>& lhs, const Quat<T>& rhs) { 
+template<typename T> constexpr Quat<T> operator+(const Quat<T>& lhs, const Quat<T>& rhs) {
 	using namespace Component;
 	return { lhs[X] + rhs[X], lhs[Y] + rhs[Y], lhs[Z] + rhs[Z], lhs[W] + rhs[W] };
 }
-template<typename T> Quat<T> operator-(const Quat<T>& lhs, const Quat<T>& rhs) { 
+template<typename T> constexpr Quat<T> operator-(const Quat<T>& lhs, const Quat<T>& rhs) {
 	using namespace Component;
 	return { lhs[X] - rhs[X], lhs[Y] - rhs[Y], lhs[Z] - rhs[Z], lhs[W] - rhs[W] };
 }
-template<typename T> Quat<T> operator*(const Quat<T>& lhs, const T& rhs) {
+template<typename T> constexpr Quat<T> operator*(const Quat<T>& lhs, const T& rhs) {
 	using namespace Component;
 	return { lhs[X] * rhs, lhs[Y] * rhs, lhs[Z] * rhs, lhs[W] * rhs };
 }
-template<typename T> Quat<T> operator*(const T& lhs, const Quat<T>& rhs) { return rhs * lhs; }
-template<typename T> Quat<T> operator/(const Quat<T>& lhs, const T& rhs) { return lhs * (T(1.0) / rhs); }
+template<typename T> constexpr Quat<T> operator*(const T& lhs, const Quat<T>& rhs) { return rhs * lhs; }
+template<typename T> constexpr Quat<T> operator/(const Quat<T>& lhs, const T& rhs) { return lhs * (1.0f / rhs); }
 
 #endif
 

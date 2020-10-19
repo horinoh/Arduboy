@@ -103,6 +103,7 @@ const unsigned char PROGMEM playerFeet_plus_mask[] =
 #define GET_COUNT(x) (sizeof(x)/sizeof(x[0]) - 2)
 #define GET_FRAMES(x) (GET_COUNT(x) / GET_WIDTH(x))
 #define GET_FRAMES_PLUS_MASK(x) (GET_FRAMES(x) / 2)
+#define COUNTOF(x) (sizeof(x)/sizeof(x[0]))
 
 const auto eyesBlinking_Width = GET_WIDTH(eyesBlinking);
 const auto eyesBlinking_Height = GET_HEIGHT(eyesBlinking);
@@ -116,8 +117,10 @@ const auto playerFeet_plus_mask_Width = GET_WIDTH(playerFeet_plus_mask);
 const auto playerFeet_plus_mask_Height = GET_HEIGHT(playerFeet_plus_mask);
 const auto playerFeet_plus_mask_Frame = GET_FRAMES_PLUS_MASK(playerFeet_plus_mask);
 
+const uint16_t FeetAnimSeq[] = { 0, 1, 2, 1 };
+
 int16_t X = Arduboy2::width() / 2, Y = Arduboy2::height() / 2;
-uint8_t Dir = 0;
+uint8_t Direction = 0;
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -139,31 +142,35 @@ void loop() {
 		//!<    2
 		//!<  1   3
 		//!<    0
-		if (arduboy.pressed(UP_BUTTON)) { --Y; Dir = 2; }
-		if (arduboy.pressed(DOWN_BUTTON)) { ++Y; Dir = 0; }
-		if (arduboy.pressed(LEFT_BUTTON)) { --X; Dir = 1; }
-		if (arduboy.pressed(RIGHT_BUTTON)) { ++X; Dir = 3; }
+		if (arduboy.pressed(UP_BUTTON)) { --Y; Direction = 2; }
+		if (arduboy.pressed(DOWN_BUTTON)) { ++Y; Direction = 0; }
+		if (arduboy.pressed(LEFT_BUTTON)) { --X; Direction = 1; }
+		if (arduboy.pressed(RIGHT_BUTTON)) { ++X; Direction = 3; }
 		X = min(max(X, 0), Arduboy2::width() - CharaWidth);
 		Y = min(max(Y, 0), Arduboy2::height() - CharaHeight);
 
 		if (arduboy.pressed(A_BUTTON)) {}
 		if (arduboy.pressed(B_BUTTON)) {}
 
-		const auto AnimFrame = arduboy.frameCount / 50;
+		const auto AnimFrame = arduboy.frameCount / 10;
 
 		//!< 方向毎にあるので 3 * 4 = 12フレーム分ある
-		//!< 0, 2 : 歩行(アニメーション)
-		auto FeetAnim = (AnimFrame % 2) * 2;
+		//!< 0, 1, 2 : 歩行アニメーション、1は停止アニメーションとしても使う
+		auto FeetAnim = FeetAnimSeq[AnimFrame % COUNTOF(FeetAnimSeq)];
+		auto HeadMove = -(AnimFrame % 2) + 1;
 		//!< 1 : 停止 
-		if (arduboy.notPressed(UP_BUTTON) && arduboy.notPressed(DOWN_BUTTON) && arduboy.notPressed(LEFT_BUTTON) && arduboy.notPressed(RIGHT_BUTTON)) { FeetAnim = 1; }
-		
-		//!< 顔
-		sprites.drawPlusMask(X, Y, playerHead_plus_mask, Dir);
+		if (arduboy.notPressed(UP_BUTTON) && arduboy.notPressed(DOWN_BUTTON) && arduboy.notPressed(LEFT_BUTTON) && arduboy.notPressed(RIGHT_BUTTON)) { 
+			FeetAnim = 1; 
+			HeadMove = 0;
+		}
+	
+		//!< 頭
+		sprites.drawPlusMask(X, Y + HeadMove, playerHead_plus_mask, Direction);
 		//!< 足
-		sprites.drawPlusMask(X, Y + playerHead_plus_mask_Height, playerFeet_plus_mask, Dir * 3 + FeetAnim);
+		sprites.drawPlusMask(X, Y + playerHead_plus_mask_Height, playerFeet_plus_mask, Direction * 3 + FeetAnim);
 		//!< 目
-		if (0 == Dir) {
-			sprites.drawSelfMasked(X + 4, Y + 8, eyesBlinking, AnimFrame % eyesBlinking_Frame);
+		if (1 == FeetAnim && 0 == Direction) {
+			sprites.drawSelfMasked(X + 4, Y + 7, eyesBlinking, AnimFrame % eyesBlinking_Frame);
 		}
 
 		//!< スプライト描画関数バリエーション (Sprite function variation)

@@ -27,7 +27,7 @@ public:
 	const T& Y() const { return m[Component::Y]; }
 
 	T LengthSquared() const { return Dot(*this, *this); }
-	T Length() const { return T(sqrt(static_cast<float>(LengthSquared()))); } //!< TODO ˆê’Ufloat‚É‚µ‚Äsqrt‚ðŽg—p‚µ‚Ä‚¢‚é
+	T Length() const { return T(sqrt(static_cast<float>(LengthSquared()))); } //!< #TODO ˆê’Ufloat‚É‚µ‚Äsqrt‚ðŽg—p‚µ‚Ä‚¢‚é
 	Vec2<T> Normalize() const { return *this / Length(); }
 
 	const String ToString() const {
@@ -35,32 +35,32 @@ public:
 	}
 	operator const String() const { return ToString(); }
 
-	static Vec2<T> Zero() { return { 0.0, 0.0 }; }
-	static Vec2<T> AxisX() { return { 1.0, 0.0 }; }
-	static Vec2<T> AxisY() { return { 1.0, 0.0 }; }
+	static constexpr Vec2<T> Zero() { return { 0.0f, 0.0f }; }
+	static constexpr Vec2<T> AxisX() { return { 1.0f, 0.0f }; }
+	static constexpr Vec2<T> AxisY() { return { 1.0f, 0.0f }; }
 
 private:
 	T m[2];
 };
 
-template<typename T> T Dot(const Vec2<T>& lhs, const Vec2<T>& rhs) { 
+template<typename T> constexpr T Dot(const Vec2<T>& lhs, const Vec2<T>& rhs) {
 	using namespace Component;
 	return lhs[X] * rhs[X] + lhs[Y] * rhs[Y];
 }
-template<typename T> Vec2<T> operator+(const Vec2<T>& lhs, const Vec2<T>& rhs) {
+template<typename T> constexpr Vec2<T> operator+(const Vec2<T>& lhs, const Vec2<T>& rhs) {
 	using namespace Component;
 	return { lhs[X] + rhs[X], lhs[Y] + rhs[Y] };
 }
-template<typename T> Vec2<T> operator-(const Vec2<T>& lhs, const Vec2<T>& rhs) {
+template<typename T> constexpr Vec2<T> operator-(const Vec2<T>& lhs, const Vec2<T>& rhs) {
 	using namespace Component;
 	return { lhs[X] - rhs[X], lhs[Y] - rhs[Y] };
 }
-template<typename T> Vec2<T> operator*(const Vec2<T>& lhs, const T& rhs) { 
+template<typename T> constexpr Vec2<T> operator*(const Vec2<T>& lhs, const T& rhs) {
 	using namespace Component;
 	return { lhs[X] * rhs, lhs[Y] * rhs };
 }
-template<typename T> Vec2<T> operator*(const T& lhs, const Vec2<T>& rhs) { return rhs * lhs; }
-template<typename T> Vec2<T> operator/(const Vec2<T>& lhs, const T& rhs) { return lhs * (T(1.0) / rhs); }
+template<typename T> constexpr Vec2<T> operator*(const T& lhs, const Vec2<T>& rhs) { return rhs * lhs; }
+template<typename T> constexpr Vec2<T> operator/(const Vec2<T>& lhs, const T& rhs) { return lhs * (1.0f / rhs); }
 
 
 #endif

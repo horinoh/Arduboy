@@ -27,23 +27,23 @@ public:
 	const String ToString() const { return m[0].ToString() + ",\n" + m[1].ToString(); }
 	operator const String() const { return ToString(); }
 
-	Mat2<T> Transpose() const { return { { m[0][0], m[1][0] }, { m[0][1], m[1][1] } }; }
-	T Determinant() const { return m[0][0] * m[1][1] - m[0][1] * m[1][0]; }
-	Mat2<T> Inverse(const T& Det) const { return Mat2<T>({ m[1][1], -m[0][1] }, { -m[1][0], m[0][0] }) / Det; }
+	constexpr Mat2<T> Transpose() const { return { { m[0][0], m[1][0] }, { m[0][1], m[1][1] } }; }
+	constexpr T Determinant() const { return m[0][0] * m[1][1] - m[0][1] * m[1][0]; }
+	constexpr Mat2<T> Inverse(const T& Det) const { return Mat2<T>({ m[1][1], -m[0][1] }, { -m[1][0], m[0][0] }) / Det; }
 
-	static Mat2<T> Identity() { return { { 1.0, 0.0 }, { 0.0, 1.0 } }; }
-	//static Mat2<T> Rotate(const T& Rad) { const T C(cos(static_cast<float>(Rad))), S(sin(static_cast<float>(Rad))); return { { C, S }, { -S, C } }; } // TODO sin cos table
+	static constexpr Mat2<T> Identity() { return { { 1.0f, 0.0f }, { 0.0f, 1.0f } }; }
+	//static Mat2<T> Rotate(const T& Rad) { const T C(cos(static_cast<float>(Rad))), S(sin(static_cast<float>(Rad))); return { { C, S }, { -S, C } }; } // #TODO sin cos table
 
 private:
 	Vec2<T> m[2];
 };
 
-template<typename T> Mat2<T> operator+(const Mat2<T>& lhs, const Mat2<T>& rhs) { return { lhs[0] + rhs[0], lhs[1] + rhs[1] }; }
-template<typename T> Mat2<T> operator-(const Mat2<T>& lhs, const Mat2<T>& rhs) { return { lhs[0] - rhs[0], lhs[1] - rhs[1] }; }
-template<typename T> Mat2<T> operator*(const Mat2<T>& lhs, const T& rhs) { return { lhs[0] * rhs, lhs[1] * rhs }; }
-template<typename T> Mat2<T> operator*(const T& lhs, const Mat2<T>& rhs) { return rhs * lhs; }
-template<typename T> Mat2<T> operator/(const Mat2<T>& lhs, const T& rhs) { return lhs * (T(1.0) / rhs); }
-template<typename T> Mat2<T> operator*(const Mat2<T>& lhs, const Mat2<T>& rhs) {
+template<typename T> constexpr Mat2<T> operator+(const Mat2<T>& lhs, const Mat2<T>& rhs) { return { lhs[0] + rhs[0], lhs[1] + rhs[1] }; }
+template<typename T> constexpr Mat2<T> operator-(const Mat2<T>& lhs, const Mat2<T>& rhs) { return { lhs[0] - rhs[0], lhs[1] - rhs[1] }; }
+template<typename T> constexpr Mat2<T> operator*(const Mat2<T>& lhs, const T& rhs) { return { lhs[0] * rhs, lhs[1] * rhs }; }
+template<typename T> constexpr Mat2<T> operator*(const T& lhs, const Mat2<T>& rhs) { return rhs * lhs; }
+template<typename T> constexpr Mat2<T> operator/(const Mat2<T>& lhs, const T& rhs) { return lhs * (1.0f / rhs); }
+template<typename T> constexpr Mat2<T> operator*(const Mat2<T>& lhs, const Mat2<T>& rhs) {
 	const auto l0 = Vec2<T>({ rhs[0][0], rhs[1][0] });
 	const auto l1 = Vec2<T>({ rhs[0][1], rhs[1][1] });
 	return { 
@@ -51,7 +51,7 @@ template<typename T> Mat2<T> operator*(const Mat2<T>& lhs, const Mat2<T>& rhs) {
 		{ Dot(lhs[1], l0), Dot(lhs[1], l1)} 
 	};
 }
-template<typename T> Vec2<T> operator*(const Vec2<T>& lhs, const Mat2<T>& rhs) {
+template<typename T> constexpr Vec2<T> operator*(const Vec2<T>& lhs, const Mat2<T>& rhs) {
 	return {
 		Dot(lhs, { rhs[0][0], rhs[1][0] }),
 		Dot(lhs, { rhs[0][1], rhs[1][1] }),
