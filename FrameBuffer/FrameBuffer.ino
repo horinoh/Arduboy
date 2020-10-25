@@ -6,6 +6,9 @@
 
 #include <Arduboy2.h>
 
+#include <FixedPoints.h>
+#include <FixedPointsCommon.h>
+
 Arduboy2 arduboy;
 
 // the setup function runs once when you press reset or power the board
@@ -68,7 +71,7 @@ void loop() {
 
 		constexpr auto Width = Arduboy2::width();
 		//!< (8 - 15 行目) ランダム (8-15 lines, Random)
-		for (auto i = 0; i < Width; ++i) { Buffer[i + Width] = rand() % 0xff; }
+		for (auto i = 0; i < Width; ++i) { Buffer[i + Width] = rand() & 0xff; }
 
 		//!< (16 - 23 行目) 白塗り (16-23 lines, Fill white)
 		for (auto i = 0; i < Width; ++i) { Buffer[i + Width * 2] = 0xff; }
@@ -103,10 +106,26 @@ void loop() {
 		}
 
 		arduboy.display();
+#elif 1
+		constexpr SQ15x16 InvW = 1.0f / Arduboy2::width();
+		constexpr SQ7x8 InvH = 1.0f / Arduboy2::height();
+		for (auto i = 0; i < (Arduboy2::height() >> 3); ++i) {
+			for (auto j = 0; j < Arduboy2::width(); ++j) {
+				const auto ClipX = InvW * (j << 1) - 1;
+				uint8_t pixel8 = 0x00;
+				if (ClipX > 0) { pixel8 = 0xff; }
+				for (auto k = 0; k < 8; ++k) {
+					const auto ClipY = -InvH * (((i << 3) + k) << 1) + 1;
+					if (ClipY > 0) { pixel8 = 0xff; }
+					if (ClipX * ClipY < 0) { pixel8 = rand() & 0xff; }
+				}
+				arduboy.paint8Pixels(pixel8);
+			}
+		}
 #else
 		//!< ランダム (Random)
 		for (auto i = 0; i < Arduboy2::width() * Arduboy2::height() / 8; ++i) {
-			arduboy.paint8Pixels(rand() % 0xff);
+			arduboy.paint8Pixels(rand() & 0xff);
 		}
 #endif
 	}

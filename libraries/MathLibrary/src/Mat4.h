@@ -15,7 +15,7 @@
 #include <Vec4.h>
 #include <Mat3.h>
 
-template<typename T = SQ15x16>
+template<typename T = SQ7x8>
 class Mat4
 {
 public:
@@ -60,7 +60,29 @@ public:
 	}
 
 	static constexpr Mat4<T> Identity() { return { { 1.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 1.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 1.0f } }; }
-
+	static Mat4<T> RotateX(const T& Rad) {
+		const T C(cosFixed(Rad)), S(sinFixed(Rad));
+		return { Vec4<T>::AxisX(), { 0.0f, C, S, 0.0f }, { 0.0f, -S, C, 0.0f }, Vec4<T>::AxisW() };
+	}
+	static Mat4<T> RotateY(const T& Rad) {
+		const T C(cosFixed(Rad)), S(sinFixed(Rad));
+		return { { C, 0.0f, -S, 0.0f }, Vec4<T>::AxisY(), { S, 0.0f, C, 0.0f }, Vec4<T>::AxisW() };
+	}
+	static Mat4<T> RotateZ(const T& Rad) {
+		const T C(cosFixed(Rad)), S(sinFixed(Rad));
+		return { { S, C, 0.0f, 0.0f }, { -C, S, 0.0f, 0.0f }, Vec4<T>::AxisZ(), Vec4<T>::AxisW() };
+	}
+	static Mat4<T> RotateAxis(const T& Rad, const Vec3<T>& Axis) {
+		const T C(cosFixed(Rad)), S(sinFixed(Rad));
+		const T C1(1.0f - C);
+		const T XY(Axis.X() * Axis.Y()), YZ(Axis.Y() * Axis.Z()), ZX(Axis.Z() * Axis.X());
+		return {
+			{ C + C1 * Axis.X() * Axis.X(), C1 * XY + S * Axis.Z(), C1 * ZX - S * Axis.Y(), 0.0f },
+			{ C1 * XY - S * Axis.Z(), C1 * Axis.Y() * Axis.Y + C, C1 * YZ + S * Axis.X(), 0.0f },
+			{ C1 * ZX + S * Axis.Y(), C1 * YZ - S * Axis.X(), C1 * Axis.Z() * Axis.Z() + C, 0.0f },
+			Vec4<T>::AxisW(),
+		};
+	}
 private:
 	Vec4<T> m[4];
 };

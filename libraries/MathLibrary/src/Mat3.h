@@ -15,7 +15,7 @@
 #include <Vec3.h>
 #include <Mat2.h>
 
-template<typename T = SQ15x16>
+template<typename T = SQ7x8>
 class Mat3
 {
 public:
@@ -51,6 +51,28 @@ public:
 	}
 
 	static constexpr Mat3<T> Identity() { return { { 1.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f }, { 0.0f, 0.0f, 1.0f } }; }
+	static Mat3<T> RotateX(const T& Rad) { 
+		const T C(cosFixed(Rad)), S(sinFixed(Rad));
+		return { Vec3<T>::AxisX(), { 0.0f, C, S }, { 0.0f, -S, C } };
+	} 
+	static Mat3<T> RotateY(const T& Rad) {
+		const T C(cosFixed(Rad)), S(sinFixed(Rad));
+		return { { C, 0.0f, -S }, Vec3<T>::AxisY(), { S, 0.0f, C } };
+	}
+	static Mat3<T> RotateZ(const T& Rad) {
+		const T C(cosFixed(Rad)), S(sinFixed(Rad));
+		return { { S, C, 0.0f }, { -C, S, 0.0f }, Vec3<T>::AxisZ() };
+	}
+	static Mat3<T> RotateAxis(const T& Rad, const Vec3<T>& Axis) {
+		const T C(cosFixed(Rad)), S(sinFixed(Rad));
+		const T C1(1.0f - C);
+		const T XY(Axis.X() * Axis.Y()), YZ(Axis.Y() * Axis.Z()), ZX(Axis.Z() * Axis.X());
+		return { 
+			{ C + C1 * Axis.X() * Axis.X(), C1 * XY + S * Axis.Z(), C1 * ZX - S * Axis.Y() },
+			{ C1 * XY - S * Axis.Z(), C1 * Axis.Y() * Axis.Y + C, C1 * YZ + S * Axis.X() },
+			{ C1 * ZX + S * Axis.Y(), C1 * YZ - S * Axis.X(), C1 * Axis.Z() * Axis.Z() + C },
+		};
+	}
 
 private:
 	Vec3<T> m[3];

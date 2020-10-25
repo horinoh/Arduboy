@@ -14,7 +14,7 @@
 
 #include <Vec2.h>
 
-template<typename T = SQ15x16>
+template<typename T = SQ7x8>
 class Mat2
 {
 public:
@@ -32,7 +32,7 @@ public:
 	constexpr Mat2<T> Inverse(const T& Det) const { return Mat2<T>({ m[1][1], -m[0][1] }, { -m[1][0], m[0][0] }) / Det; }
 
 	static constexpr Mat2<T> Identity() { return { { 1.0f, 0.0f }, { 0.0f, 1.0f } }; }
-	//static Mat2<T> Rotate(const T& Rad) { const T C(cos(static_cast<float>(Rad))), S(sin(static_cast<float>(Rad))); return { { C, S }, { -S, C } }; } // #TODO sin cos table
+	static Mat2<T> Rotate(const T& Rad) { const T C(cosFixed(Rad)), S(sinFixed(Rad)); return { { C, S }, { -S, C } }; }
 
 private:
 	Vec2<T> m[2];

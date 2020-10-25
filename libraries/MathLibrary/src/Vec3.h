@@ -14,7 +14,7 @@
 
 #include <Common.h>
 
-template<typename T = SQ15x16>
+template<typename T = SQ7x8>
 class Vec3
 {
 public:
@@ -28,7 +28,7 @@ public:
 	const T& Z() const { return m[Component::Z]; }
 
 	T LengthSquared() const { return Dot(*this, *this); }
-	T Length() const { return T(sqrt(static_cast<float>(LengthSquared()))); } //!< #TODO ˆê’Ufloat‚É‚µ‚Äsqrt‚ðŽg—p‚µ‚Ä‚¢‚é
+	T Length() const { return sqrtFixed(LengthSquared()); }
 	Vec3<T> Normalize() const { return *this / Length(); }
 
 	const String ToString() const {
