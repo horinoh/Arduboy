@@ -59,6 +59,18 @@ void loop() {
 		//!< SQ1x14
 		//!< SQ1x30
 		//!< SQ1x62
+		
+		//!< UQXXXどうし、SQXXXどうしならキャストが可能
+		{
+			constexpr UQ8x8 u88 = 0.68f;
+			constexpr SQ7x8 s88 = 0.68f;
+
+			constexpr auto u1616 = static_cast<UQ16x16>(u88);
+			//constexpr auto NG = static_cast<UQ16x16>(s88);
+
+			constexpr auto s1616 = static_cast<SQ15x16>(s88);
+			//constexpr auto NG = static_cast<SQ15x16>(u88);
+		}
 
 		if(arduboy.justPressed(A_BUTTON)){
 			arduboy.clear();
