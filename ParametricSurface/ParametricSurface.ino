@@ -9,7 +9,7 @@
 #include <MathLibrary.h>
 
 //#define DRAW_UV
-//#define DRAW_PRINT
+#define DRAW_PRINT
 
 Arduboy2 arduboy;
 
@@ -24,23 +24,19 @@ Vec3<Scalar> VertexBuffer[VCount * UCount];
 constexpr auto PrimitiveCount = (VCount - 1) * (UCount - 1) * 2;
 uint8_t IndexBuffer[PrimitiveCount * 3];
 
-template<typename T> constexpr Vec2<T> GetUV(const T& U, const T& V) { 
-#ifdef DRAW_UV
-	return Vec2<T>(U, V);
-#else
-	return Vec2<T>(T::Pi * 2 * fractFixed(U), T::Pi * 2 * fractFixed(V));
-#endif
+namespace Plane {
+	template<typename T> constexpr Vec2<T> GetUV(const T& U, const T& V) { return Vec2<T>(U, V); }
+	template<typename T> constexpr Vec3<T> GetPos(const Vec2<T>& InUV) { return Vec3<T>(InUV.X(), InUV.Y(), 0); }
 }
-template<typename T> constexpr Vec3<T> GetPos(const Vec2<T>& InUV) {
-#ifdef DRAW_UV
-	return Vec3<T>(InUV.X(), InUV.Y(), 0);
-#else
-	//const auto UV = GetUV(InUV.X(), InUV.Y()); // #TODO
-	const auto UV = Vec2<T>((float)InUV.X(), (float)InUV.Y());
-	constexpr T InnerR = 0.5f, OuterR = 1.0f;
-	const T CU = cosFixed(UV.X()), CV = cosFixed(UV.Y()), SU = sinFixed(UV.X()), SV = sinFixed(UV.Y());
-	return Vec3<T>((OuterR + InnerR * CV) * CU, (OuterR + InnerR * CV) * SU, InnerR * SV);
-#endif
+namespace Torus {
+	template<typename T> constexpr Vec2<T> GetUV(const T& U, const T& V) {
+		return Vec2<T>(T::Pi * 2 * fractFixed(U), T::Pi * 2 * fractFixed(V));
+	}
+	template<typename T> constexpr Vec3<T> GetPos(const Vec2<T>& UV) {
+		constexpr T InnerR = 0.5f, OuterR = 1.0f;
+		const T CU = cosFixed(UV.X()), CV = cosFixed(UV.Y()), SU = sinFixed(UV.X()), SV = sinFixed(UV.Y());
+		return Vec3<T>((OuterR + InnerR * CV) * CU, (OuterR + InnerR * CV) * SU, InnerR * SV);
+	}
 }
 
 // the setup function runs once when you press reset or power the board
@@ -54,11 +50,19 @@ void setup() {
 	auto Count = 0;
 	auto V = Scalar(0);
 	for (uint16_t i = 0; i < VCount; ++i, V += DiffV) {
+#ifndef DRAW_UV
 		if (i == VCount - 1) { V = Scalar(1); } //!< Œë·‚ª‚ ‚é‚Ì‚Å
+#endif
 		auto U = Scalar(0);
 		for (auto j = 0; j < UCount; ++j, U += DiffU, ++Count) {
+#ifndef DRAW_UV
 			if (j == UCount - 1) { U = Scalar(1); } //!< Œë·‚ª‚ ‚é‚Ì‚Å
-			VertexBuffer[Count] = GetPos(GetUV(U, V));
+#endif
+#ifdef DRAW_UV
+			VertexBuffer[Count] = Plane::GetPos(Plane::GetUV(U, V));
+#else
+			VertexBuffer[Count] = Torus::GetPos(Torus::GetUV(U, V));
+#endif
 		}
 	}
 
@@ -86,23 +90,18 @@ void loop() {
 
 		const auto Start = millis(); {
 #ifdef DRAW_UV
-			const Vec2<SQ15x16> Scale(Arduboy2::width(), Arduboy2::height());
+			const auto Scale = Vec2<SQ15x16>(Arduboy2::width(), Arduboy2::height());
+			const auto Offset = Vec2<SQ15x16>::Zero();
 #else
-			const Vec2<SQ15x16> Scale(40.0f, 20.0f);
-			const Vec2<SQ15x16> Offset(Arduboy2::width() >> 1, Arduboy2::height() >> 1);
+			const auto Scale = Vec2<SQ15x16>(40.0f, 20.0f);
+			const auto Offset = Vec2<SQ15x16>(Arduboy2::width() >> 1, Arduboy2::height() >> 1);
 #endif
 			for (auto i = 0; i < PrimitiveCount; ++i) {
 				const auto baseIdx = i * 3;
 				const auto idx0 = IndexBuffer[baseIdx], idx1 = IndexBuffer[baseIdx + 1], idx2 = IndexBuffer[baseIdx + 2];
-#ifdef DRAW_UV
-				arduboy.drawTriangle((float)(Scale.X() * VertexBuffer[idx0].X()), (float)(Scale.Y() * VertexBuffer[idx0].Y()),
-					(float)(Scale.X() * VertexBuffer[idx1].X()), (float)(Scale.Y() * VertexBuffer[idx1].Y()),
-					(float)(Scale.X() * VertexBuffer[idx2].X()), (float)(Scale.Y() * VertexBuffer[idx2].Y()), WHITE);
-#else
-				arduboy.drawTriangle((float)(Scale.X() * VertexBuffer[idx0].X() + Offset.X()), (float)(Scale.Y() * VertexBuffer[idx0].Y() + Offset.Y()),
-					(float)(Scale.X() * VertexBuffer[idx1].X() + Offset.X()), (float)(Scale.Y() * VertexBuffer[idx1].Y() + Offset.Y()),
-					(float)(Scale.X() * VertexBuffer[idx2].X() + Offset.X()), (float)(Scale.Y() * VertexBuffer[idx2].Y() + Offset.Y()), WHITE);
-#endif
+				arduboy.drawTriangle(static_cast<float>(Scale.X() * VertexBuffer[idx0].X() + Offset.X()), static_cast<float>(Scale.Y() * VertexBuffer[idx0].Y() + Offset.Y()),
+					static_cast<float>(Scale.X() * VertexBuffer[idx1].X() + Offset.X()), static_cast<float>(Scale.Y() * VertexBuffer[idx1].Y() + Offset.Y()),
+					static_cast<float>(Scale.X() * VertexBuffer[idx2].X() + Offset.X()), static_cast<float>(Scale.Y() * VertexBuffer[idx2].Y() + Offset.Y()), WHITE);
 			}
 		} const auto End = millis();
 

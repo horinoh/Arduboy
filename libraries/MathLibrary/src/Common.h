@@ -24,6 +24,9 @@ template<typename T> constexpr T fracFixed(const T& lhs) { return fractFixed(lhs
 template<typename T> constexpr T lerpFixed(const T& lhs, const T& rhs, const T& t) { return lhs * (1 - t) + rhs * t; }
 template<typename T> constexpr T mixFixed(const T& lhs, const T& rhs, const T& t) { return lerpFixed(lhs, rhs, t); }
 
+template<typename T> constexpr T toRadian(const T& lhs) { return lhs / 180.0f * T::Pi; }
+template<typename T> constexpr T toDegree(const T& lhs) { return lhs / T::Pi * 180.0f; }
+
 template<typename T> constexpr T sinFixed(const T& radian) { return T(sin(static_cast<float>(radian))); } //!< #TODO ˆê’Ufloat‚É‚µ‚Ä‚¢‚é
 template<typename T> constexpr T cosFixed(const T& radian) { return T(cos(static_cast<float>(radian))); } //!< #TODO ˆê’Ufloat‚É‚µ‚Ä‚¢‚é
 
