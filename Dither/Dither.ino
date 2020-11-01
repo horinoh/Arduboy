@@ -44,10 +44,12 @@ constexpr uint8_t Bayer(const uint8_t i, const uint8_t j, const uint8_t n)
 		+ i / (n >> 1) | ((((i / (n >> 1)) & 1) ? !(j / (n >> 1)) : (j / (n >> 1))) << 1);
 }
 
-constexpr uint8_t N = 2 * 2;
+constexpr uint8_t N = 2 * 2; //!< 2‚Ì—Ýæ‚Å‚ ‚é‚±‚Æ
+constexpr float InvN2 = 1.0f / (N * N);
 SQ15x16 ThresholdMap[N][N];
 
 auto Tone = SQ15x16(0.5f);
+uint8_t GetDither(const uint8_t x, const uint8_t y, const SQ15x16& tone) { return ThresholdMap[y % N][x % N] < tone ? 1 : 0; }
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -57,7 +59,7 @@ void setup() {
 
 	for (uint8_t i = 0; i < N; ++i) {
 		for (uint8_t j = 0; j < N; ++j) {
-			ThresholdMap[i][j] = static_cast<float>(Bayer(i, j, N)) / (N * N);
+			ThresholdMap[i][j] = static_cast<float>(Bayer(i, j, N)) * InvN2;
 		}
 	}
 }
@@ -94,8 +96,8 @@ void loop() {
 			for (auto j = 0; j < Arduboy2::width(); ++j) {
 				uint8_t p = 0;
 				for (auto k = 0; k < 8; ++k) {
-					p |= (ThresholdMap[((i << 3) + k) % N][j % N] < Tone ? 1 : 0) << k;
-					//p |= (ThresholdMap[((i << 3) + k) % N][j % N] < SQ15x16(static_cast<float>(j) * Denom) ? 1 : 0) << k;
+					p |= GetDither(j, (i << 3) + k, Tone) << k;
+					//p |= GetDither(j, (i << 3) + k, SQ15x16(static_cast<float>(j) * Denom)) << k;
 				}
 				arduboy.paint8Pixels(p);
 			}

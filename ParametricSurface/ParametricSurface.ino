@@ -14,8 +14,8 @@ Arduboy2 arduboy;
 
 using Scalar = SQ7x8;
 
-constexpr auto UCount = 8;
-constexpr auto VCount = 8;
+constexpr auto UCount = 9;
+constexpr auto VCount = 9;
 constexpr Scalar DiffU(1.0f / (UCount - 1));
 constexpr Scalar DiffV(1.0f / (VCount - 1));
 
@@ -83,8 +83,8 @@ void CreateIndexBuffer(uint8_t* Buffer, const int UC, const int VC)
 		const auto baseIdx = i * UC;
 		for (auto j = 0; j < UC - 1; ++j) {
 			const auto idx0 = baseIdx + j, idx1 = baseIdx + j + UCount, idx2 = baseIdx + j + 1, idx3 = baseIdx + j + 1 + UCount;
-			// 0 2
-			// 1 3
+			//!< 0 2
+			//!< 1 3
 			Buffer[Count++] = idx0;
 			Buffer[Count++] = idx1;
 			Buffer[Count++] = idx2;
@@ -95,6 +95,7 @@ void CreateIndexBuffer(uint8_t* Buffer, const int UC, const int VC)
 		}
 	}
 }
+
 void Draw(const Vec3<Scalar>* VB, const uint8_t* IB, const int PC)
 {
 	const auto Scale = Vec2<SQ15x16>(40.0f, 20.0f);
@@ -103,11 +104,27 @@ void Draw(const Vec3<Scalar>* VB, const uint8_t* IB, const int PC)
 	for (auto i = 0; i < PC; ++i) {
 		const auto baseIdx = i * 3;
 		const auto idx0 = IB[baseIdx], idx1 = IB[baseIdx + 1], idx2 = IB[baseIdx + 2];
-		arduboy.drawTriangle(static_cast<int>(Scale.X() * VB[idx0].X() + Offset.X()), static_cast<int>(Scale.Y() * VB[idx0].Y() + Offset.Y()),
-			static_cast<int>(Scale.X() * VB[idx1].X() + Offset.X()), static_cast<int>(Scale.Y() * VB[idx1].Y() + Offset.Y()),
-			static_cast<int>(Scale.X() * VB[idx2].X() + Offset.X()), static_cast<int>(Scale.Y() * VB[idx2].Y() + Offset.Y()), WHITE);
-		//arduboy.drawTriangle(static_cast<int>(VB[idx0].X()), static_cast<int>(VB[idx0].Y()), static_cast<int>(VB[idx1].X()), static_cast<int>(VB[idx1].Y()), static_cast<int>(VB[idx2].X()), static_cast<int>(VB[idx2].Y()), WHITE);
+		const auto& v0 = VB[idx0], v1 = VB[idx1], v2 = VB[idx2];
+		const auto normal = Cross(v1 - v0, v2 - v0);
+		if (normal.Z() < 0) {
+			DrawTriangle(static_cast<int>(Scale.X() * v0.X() + Offset.X()), static_cast<int>(Scale.Y() * v0.Y() + Offset.Y()),
+				static_cast<int>(Scale.X() * v1.X() + Offset.X()), static_cast<int>(Scale.Y() * v1.Y() + Offset.Y()),
+				static_cast<int>(Scale.X() * v2.X() + Offset.X()), static_cast<int>(Scale.Y() * v2.Y() + Offset.Y()), SQ15x16(0.5f));
+		}
 	}
+}
+
+constexpr uint8_t N = 2 * 2; //!< 2‚Ì—Ýæ‚Å‚ ‚é‚±‚Æ
+constexpr float InvN2 = 1.0f / (N * N);
+SQ15x16 ThresholdMap[N][N];
+
+uint8_t GetDither(const uint8_t x, const uint8_t y, const SQ15x16& shade) { return ThresholdMap[y % N][x % N] < shade ? 1 : 0; }
+
+void DrawTriangle(const int16_t x0, const int16_t y0, const int16_t x1, const int16_t y1, const int16_t x2, const int16_t y2, const SQ15x16& shade)
+{
+	//!< #TODO
+	//auto Buffer = arduboy.getBuffer();
+	arduboy.drawTriangle(x0, y0, x1, y1, x2, y2, WHITE);
 }
 
 // the setup function runs once when you press reset or power the board
@@ -120,6 +137,12 @@ void setup() {
 	CreateVertexBuffer(VertexBuffer, UCount, VCount, Shape);
 
 	CreateIndexBuffer(IndexBuffer, UCount, VCount);
+
+	for (uint8_t i = 0; i < N; ++i) {
+		for (uint8_t j = 0; j < N; ++j) {
+			ThresholdMap[i][j] = static_cast<float>(Bayer(i, j, N)) * InvN2;
+		}
+	}
 }
 
 // the loop function runs over and over again until power down or reset
@@ -137,6 +160,22 @@ void loop() {
 			Shape = static_cast<enum class ShapeType>(ST);
 			CreateVertexBuffer(VertexBuffer, UCount, VCount, Shape);
 		}
+
+#if 0
+		{
+			constexpr auto Shade = SQ15x16(0.5f);
+			auto Buffer = arduboy.getBuffer();
+			for (auto i = 0; i < Arduboy2::height() >> 3; ++i) {
+				for (auto j = 0; j < Arduboy2::width(); ++j) {
+					uint8_t p = 0;
+					for (auto k = 0; k < 8; ++k) {
+						p |= GetDither(j, (i << 3) + k, Shade) << k;
+					}
+					Buffer[j + Arduboy2::width() * i] = p;
+				}
+			}
+		}
+#endif
 
 		const auto Start = millis(); {
 			Draw(VertexBuffer, IndexBuffer, PrimitiveCount);
