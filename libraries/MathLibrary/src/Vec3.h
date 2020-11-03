@@ -36,10 +36,10 @@ public:
 	}
 	operator const String() const { return ToString(); }
 
-	static constexpr Vec3<T> Zero() { return { 0.0f, 0.0f, 0.0f }; }
-	static constexpr Vec3<T> AxisX() { return { 1.0f, 0.0f, 0.0f }; }
-	static constexpr Vec3<T> AxisY() { return { 0.0f, 1.0f, 0.0f }; }
-	static constexpr Vec3<T> AxisZ() { return { 0.0f, 0.0f, 1.0f }; }
+	static constexpr Vec3<T> Zero() { return { 0, 0, 0 }; }
+	static constexpr Vec3<T> AxisX() { return { 1, 0, 0 }; }
+	static constexpr Vec3<T> AxisY() { return { 0, 1, 0 }; }
+	static constexpr Vec3<T> AxisZ() { return { 0, 0, 1 }; }
 
 private:
 	T m[3];
@@ -66,7 +66,7 @@ template<typename T> constexpr Vec3<T> operator*(const Vec3<T>& lhs, const T& rh
 	return { lhs[X] * rhs, lhs[Y] * rhs, lhs[Z] * rhs };
 }
 template<typename T> constexpr Vec3<T> operator*(const T& lhs, const Vec3<T>& rhs) { rhs * lhs; }
-template<typename T> constexpr Vec3<T> operator/(const Vec3<T>& lhs, const T& rhs) { return lhs * (1.0f / rhs); }
+template<typename T> constexpr Vec3<T> operator/(const Vec3<T>& lhs, const T& rhs) { return lhs * (1 / rhs); }
 
 
 #endif

@@ -14,6 +14,7 @@
 
 #include <Vec3.h>
 #include <Mat2.h>
+#include <Quat.h>
 
 template<typename T = SQ7x8>
 class Mat3
@@ -21,7 +22,22 @@ class Mat3
 public:
 	Mat3() { *this = Identity(); }
 	Mat3(const Vec3<T>& c0, const Vec3<T>& c1, const Vec3<T>& c2) { m[0] = c0; m[1] = c1; m[2] = c2; }
-
+	/*
+	Mat3(const Quat<T>& q) {
+		const auto xx = q.X() * q.X();
+		const auto yy = q.Y() * q.Y();
+		const auto zz = q.Z() * q.Z();
+		const auto xy = q.X() * q.Y();
+		const auto xz = q.X() * q.Z();
+		const auto yz = q.Y() * q.Z();
+		const auto wx = q.W() * q.X();
+		const auto wy = q.W() * q.Y();
+		const auto wz = q.W() * q.Z();
+		m[0] = { 1 - 2 * (yy + zz), 2 * (xy + wz), 2 * (xz - wy) };
+		m[1] = { 2 * (xy - wz), 1 - 2 * (xx + zz), 2 * (yz + wx) };
+		m[2] = { 2 * (xz + wy), 2 * (yz - wx), 1 - 2 * (xx + yy) };
+	}
+	*/
 	Vec3<T>& operator[](const uint8_t i) { return m[i]; }
 	const Vec3<T>& operator[](const uint8_t i) const { return m[i]; }
 
@@ -50,22 +66,24 @@ public:
 		return Mat3<>({ c0, c1, c2 }) / Det;
 	}
 
-	static constexpr Mat3<T> Identity() { return { { 1.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f }, { 0.0f, 0.0f, 1.0f } }; }
+	static constexpr Mat3<T> Identity() { return { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 } }; }
+	static constexpr Mat3<T> Scale(const T& s) { return { { s, 0, 0 },{ 0, s, 0 }, { 0, 0, s } }; }
+	static constexpr Mat3<T> Scale(const T& x, const T& y, const T& z) { return { { x, 0, 0 }, { 0, y, 0 }, { 0, 0, z } }; }
 	static Mat3<T> RotateX(const T& Rad) { 
 		const T C(cosFixed(Rad)), S(sinFixed(Rad));
-		return { Vec3<T>::AxisX(), { 0.0f, C, S }, { 0.0f, -S, C } };
+		return { Vec3<T>::AxisX(), { 0, C, S }, { 0, -S, C } };
 	} 
 	static Mat3<T> RotateY(const T& Rad) {
 		const T C(cosFixed(Rad)), S(sinFixed(Rad));
-		return { { C, 0.0f, -S }, Vec3<T>::AxisY(), { S, 0.0f, C } };
+		return { { C, 0, -S }, Vec3<T>::AxisY(), { S, 0, C } };
 	}
 	static Mat3<T> RotateZ(const T& Rad) {
 		const T C(cosFixed(Rad)), S(sinFixed(Rad));
-		return { { S, C, 0.0f }, { -C, S, 0.0f }, Vec3<T>::AxisZ() };
+		return { { S, C, 0 }, { -C, S, 0 }, Vec3<T>::AxisZ() };
 	}
 	static Mat3<T> RotateAxis(const T& Rad, const Vec3<T>& Axis) {
 		const T C(cosFixed(Rad)), S(sinFixed(Rad));
-		const T C1(1.0f - C);
+		const T C1(1 - C);
 		const T XY(Axis.X() * Axis.Y()), YZ(Axis.Y() * Axis.Z()), ZX(Axis.Z() * Axis.X());
 		return { 
 			{ C + C1 * Axis.X() * Axis.X(), C1 * XY + S * Axis.Z(), C1 * ZX - S * Axis.Y() },
@@ -82,7 +100,7 @@ template<typename T> constexpr Mat3<T> operator+(const Mat3<T>& lhs, const Mat3<
 template<typename T> constexpr Mat3<T> operator-(const Mat3<T>& lhs, const Mat3<T>& rhs) { return { lhs[0] - rhs[0], lhs[1] - rhs[1], lhs[2] - rhs[2] }; }
 template<typename T> constexpr Mat3<T> operator*(const Mat3<T>& lhs, const T& rhs) { return { lhs[0] * rhs, lhs[1] * rhs, lhs[2] * rhs }; }
 template<typename T> constexpr Mat3<T> operator*(const T& lhs, const Mat3<T>& rhs) { return rhs * lhs; }
-template<typename T> constexpr Mat3<T> operator/(const Mat3<T>& lhs, const T& rhs) { return lhs * (1.0f / rhs); }
+template<typename T> constexpr Mat3<T> operator/(const Mat3<T>& lhs, const T& rhs) { return lhs * (1 / rhs); }
 template<typename T> constexpr Mat3<T> operator*(const Mat3<T>& lhs, const Mat3<T>& rhs) {
 	const auto l0 = Vec3<T>({ rhs[0][0], rhs[1][0], rhs[2][0] });
 	const auto l1 = Vec3<T>({ rhs[0][1], rhs[1][1], rhs[2][1] });

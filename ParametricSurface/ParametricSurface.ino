@@ -4,6 +4,9 @@
  Author:	horin
 */
 
+//!< Parametric Surface
+//!< cf) http://www.3d-meier.de/tut3/Seite0.html
+
 #include <Arduboy2.h>
 
 #include <MathLibrary.h>
@@ -14,12 +17,13 @@ Arduboy2 arduboy;
 
 using Scalar = SQ7x8;
 
-constexpr auto UCount = 9;
-constexpr auto VCount = 9;
+constexpr auto UCount = 8;
+constexpr auto VCount = 8;
 constexpr Scalar DiffU(1.0f / (UCount - 1));
 constexpr Scalar DiffV(1.0f / (VCount - 1));
 
 Vec3<Scalar> VertexBuffer[VCount * UCount];
+Vec3<Scalar> Transformed[countof(VertexBuffer)];
 constexpr auto PrimitiveCount = (VCount - 1) * (UCount - 1) * 2;
 uint8_t IndexBuffer[PrimitiveCount * 3];
 
@@ -30,7 +34,8 @@ enum class ShapeType : int8_t {
 
 	Count,
 };
-enum class ShapeType Shape = ShapeType::Plane;
+enum class ShapeType Shape = ShapeType::Torus;
+int Degree = 0;
 
 namespace Plane {
 	template<typename T> constexpr Vec2<T> GetUV(const T& U, const T& V) { return Vec2<T>(U, V); }
@@ -48,7 +53,7 @@ namespace Torus {
 }
 namespace Sphere {
 	template<typename T> constexpr Vec2<T> GetUV(const T& U, const T& V) {
-		return Vec2<T>(T::Pi * 2 * fractFixed(U), T::Pi * fractFixed(V));
+		return Vec2<T>(T::Pi * 2 * fractFixed(U), T::Pi * (1 - fractFixed(V)));
 	}
 	template<typename T> constexpr Vec3<T> GetPos(const Vec2<T>& UV) {
 		constexpr T R = 1.5f;
@@ -95,12 +100,17 @@ void CreateIndexBuffer(uint8_t* Buffer, const int UC, const int VC)
 		}
 	}
 }
-
+void Transform(Vec3<Scalar>* OutBuffer, const Vec3<Scalar>* InBuffer, const uint8_t Count, const Mat3<Scalar>& Mat) 
+{
+	for (auto i = 0; i < Count; ++i) {
+		OutBuffer[i] = InBuffer[i] * Mat;
+	}
+}
+ 
 void Draw(const Vec3<Scalar>* VB, const uint8_t* IB, const int PC)
 {
-	const auto Scale = Vec2<SQ15x16>(40.0f, 20.0f);
+	const auto Scale = Vec2<SQ15x16>(20.0f, 20.0f);
 	const auto Offset = Vec2<SQ15x16>(Arduboy2::width() >> 1, Arduboy2::height() >> 1);
-
 	for (auto i = 0; i < PC; ++i) {
 		const auto baseIdx = i * 3;
 		const auto idx0 = IB[baseIdx], idx1 = IB[baseIdx + 1], idx2 = IB[baseIdx + 2];
@@ -161,24 +171,15 @@ void loop() {
 			CreateVertexBuffer(VertexBuffer, UCount, VCount, Shape);
 		}
 
-#if 0
-		{
-			constexpr auto Shade = SQ15x16(0.5f);
-			auto Buffer = arduboy.getBuffer();
-			for (auto i = 0; i < Arduboy2::height() >> 3; ++i) {
-				for (auto j = 0; j < Arduboy2::width(); ++j) {
-					uint8_t p = 0;
-					for (auto k = 0; k < 8; ++k) {
-						p |= GetDither(j, (i << 3) + k, Shade) << k;
-					}
-					Buffer[j + Arduboy2::width() * i] = p;
-				}
-			}
-		}
-#endif
-
 		const auto Start = millis(); {
+#if 1
+			Degree = ++Degree % 360;
+			const auto RotY = Mat3<Scalar>::RotateY(toRadian(Scalar(Degree)));
+			Transform(Transformed, VertexBuffer, countof(VertexBuffer), RotY);
+			Draw(Transformed, IndexBuffer, PrimitiveCount);
+#else
 			Draw(VertexBuffer, IndexBuffer, PrimitiveCount);
+#endif
 		} const auto End = millis();
 
 #ifdef DRAW_PRINT

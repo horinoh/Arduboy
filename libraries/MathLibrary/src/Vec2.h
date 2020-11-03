@@ -35,9 +35,9 @@ public:
 	}
 	operator const String() const { return ToString(); }
 
-	static constexpr Vec2<T> Zero() { return { 0.0f, 0.0f }; }
-	static constexpr Vec2<T> AxisX() { return { 1.0f, 0.0f }; }
-	static constexpr Vec2<T> AxisY() { return { 1.0f, 0.0f }; }
+	static constexpr Vec2<T> Zero() { return { 0, 0 }; }
+	static constexpr Vec2<T> AxisX() { return { 1, 0 }; }
+	static constexpr Vec2<T> AxisY() { return { 1, 0 }; }
 
 private:
 	T m[2];
@@ -60,7 +60,7 @@ template<typename T> constexpr Vec2<T> operator*(const Vec2<T>& lhs, const T& rh
 	return { lhs[X] * rhs, lhs[Y] * rhs };
 }
 template<typename T> constexpr Vec2<T> operator*(const T& lhs, const Vec2<T>& rhs) { return rhs * lhs; }
-template<typename T> constexpr Vec2<T> operator/(const Vec2<T>& lhs, const T& rhs) { return lhs * (1.0f / rhs); }
+template<typename T> constexpr Vec2<T> operator/(const Vec2<T>& lhs, const T& rhs) { return lhs * (1 / rhs); }
 
 
 #endif

@@ -37,11 +37,11 @@ public:
 	}
 	operator const String() const { return ToString(); }
 
-	static constexpr Vec4<T> Zero() { return { 0.0f, 0.0f, 0.0f, 0.0f }; }
-	static constexpr Vec4<T> AxisX() { return { 1.0f, 0.0f, 0.0f, 0.0f }; }
-	static constexpr Vec4<T> AxisY() { return { 0.0f, 1.0f, 0.0f, 0.0f }; }
-	static constexpr Vec4<T> AxisZ() { return { 0.0f, 0.0f, 1.0f, 0.0f }; }
-	static constexpr Vec4<T> AxisW() { return { 0.0f, 0.0f, 0.0f, 1.0f }; }
+	static constexpr Vec4<T> Zero() { return { 0, 0, 0, 0 }; }
+	static constexpr Vec4<T> AxisX() { return { 1, 0, 0, 0 }; }
+	static constexpr Vec4<T> AxisY() { return { 0, 1, 0, 0 }; }
+	static constexpr Vec4<T> AxisZ() { return { 0, 0, 1, 0 }; }
+	static constexpr Vec4<T> AxisW() { return { 0, 0, 0, 1 }; }
 
 private:
 	T m[4];
@@ -64,7 +64,7 @@ template<typename T> constexpr Vec4<T> operator*(const Vec4<T>& lhs, const T& rh
 	return { lhs[X] * rhs, lhs[Y] * rhs, lhs[Z] * rhs, lhs[W] * rhs };
 }
 template<typename T> constexpr Vec4<T> operator*(const T& lhs, const Vec4<T>& rhs) { return rhs * lhs; }
-template<typename T> constexpr Vec4<T> operator/(const Vec4<T>& lhs, const T& rhs) { return lhs * (1.0f / rhs); }
+template<typename T> constexpr Vec4<T> operator/(const Vec4<T>& lhs, const T& rhs) { return lhs * (1 / rhs); }
 
 #endif
 

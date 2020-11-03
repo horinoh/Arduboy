@@ -59,30 +59,35 @@ public:
 		return Mat4<>({ c0, c1, c2, c3 }) / Det;
 	}
 
-	static constexpr Mat4<T> Identity() { return { { 1.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 1.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 1.0f } }; }
+	static constexpr Mat4<T> Identity() { return { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { 0, 0, 0, 1 } }; }
+	static constexpr Mat4<T> Scale(const T& s) { return { { s, 0, 0, 0 },{ 0, s, 0, 0 }, { 0, 0, s, 0 }, { 0, 0, 0, 1 } }; }
+	static constexpr Mat4<T> Scale(const T& x, const T& y, const T& z) { return { { x, 0, 0, 0 }, { 0, y, 0, 0 }, { 0, 0, z, 0 }, { 0, 0, 0, 1 } }; }
 	static Mat4<T> RotateX(const T& Rad) {
 		const T C(cosFixed(Rad)), S(sinFixed(Rad));
-		return { Vec4<T>::AxisX(), { 0.0f, C, S, 0.0f }, { 0.0f, -S, C, 0.0f }, Vec4<T>::AxisW() };
+		return { Vec4<T>::AxisX(), { 0, C, S, 0 }, { 0, -S, C, 0 }, Vec4<T>::AxisW() };
 	}
 	static Mat4<T> RotateY(const T& Rad) {
 		const T C(cosFixed(Rad)), S(sinFixed(Rad));
-		return { { C, 0.0f, -S, 0.0f }, Vec4<T>::AxisY(), { S, 0.0f, C, 0.0f }, Vec4<T>::AxisW() };
+		return { { C, 0, -S, 0 }, Vec4<T>::AxisY(), { S, 0, C, 0 }, Vec4<T>::AxisW() };
 	}
 	static Mat4<T> RotateZ(const T& Rad) {
 		const T C(cosFixed(Rad)), S(sinFixed(Rad));
-		return { { S, C, 0.0f, 0.0f }, { -C, S, 0.0f, 0.0f }, Vec4<T>::AxisZ(), Vec4<T>::AxisW() };
+		return { { S, C, 0, 0 }, { -C, S, 0, 0 }, Vec4<T>::AxisZ(), Vec4<T>::AxisW() };
 	}
 	static Mat4<T> RotateAxis(const T& Rad, const Vec3<T>& Axis) {
 		const T C(cosFixed(Rad)), S(sinFixed(Rad));
-		const T C1(1.0f - C);
+		const T C1(1 - C);
 		const T XY(Axis.X() * Axis.Y()), YZ(Axis.Y() * Axis.Z()), ZX(Axis.Z() * Axis.X());
 		return {
-			{ C + C1 * Axis.X() * Axis.X(), C1 * XY + S * Axis.Z(), C1 * ZX - S * Axis.Y(), 0.0f },
-			{ C1 * XY - S * Axis.Z(), C1 * Axis.Y() * Axis.Y + C, C1 * YZ + S * Axis.X(), 0.0f },
-			{ C1 * ZX + S * Axis.Y(), C1 * YZ - S * Axis.X(), C1 * Axis.Z() * Axis.Z() + C, 0.0f },
+			{ C + C1 * Axis.X() * Axis.X(), C1 * XY + S * Axis.Z(), C1 * ZX - S * Axis.Y(), 0 },
+			{ C1 * XY - S * Axis.Z(), C1 * Axis.Y() * Axis.Y + C, C1 * YZ + S * Axis.X(), 0 },
+			{ C1 * ZX + S * Axis.Y(), C1 * YZ - S * Axis.X(), C1 * Axis.Z() * Axis.Z() + C, 0 },
 			Vec4<T>::AxisW(),
 		};
 	}
+	//static constexpr Mat4<T> Perspective() {}
+	//static constexpr Mat4<T> LookAt() {}
+	//static constexpr Mat4<T> Viewport(){}
 private:
 	Vec4<T> m[4];
 };
@@ -91,7 +96,7 @@ template<typename T> constexpr Mat4<T> operator+(const Mat4<T>& lhs, const Mat4<
 template<typename T> constexpr Mat4<T> operator-(const Mat4<T>& lhs, const Mat4<T>& rhs) { return { lhs[0] - rhs[0], lhs[1] - rhs[1], lhs[2] - rhs[2], lhs[3] - rhs[3] }; }
 template<typename T> constexpr Mat4<T> operator*(const Mat4<T>& lhs, const T& rhs) { return { lhs[0] * rhs, lhs[1] * rhs, lhs[2] * rhs, lhs[3] * rhs }; }
 template<typename T> constexpr Mat4<T> operator*(const T& lhs, const Mat4<T>& rhs) { return rhs * lhs; }
-template<typename T> constexpr Mat4<T> operator/(const Mat4<T>& lhs, const T& rhs) { return lhs * (1.0f / rhs); }
+template<typename T> constexpr Mat4<T> operator/(const Mat4<T>& lhs, const T& rhs) { return lhs * (1 / rhs); }
 template<typename T> constexpr Mat4<T> operator*(const Mat4<T>& lhs, const Mat4<T>& rhs) {
 	const auto l0 = Vec4<T>({ rhs[0][0], rhs[1][0], rhs[2][0], rhs[3][0] });
 	const auto l1 = Vec4<T>({ rhs[0][1], rhs[1][1], rhs[2][1], rhs[3][1] });

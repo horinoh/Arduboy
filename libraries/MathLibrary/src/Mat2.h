@@ -31,7 +31,9 @@ public:
 	constexpr T Determinant() const { return m[0][0] * m[1][1] - m[0][1] * m[1][0]; }
 	constexpr Mat2<T> Inverse(const T& Det) const { return Mat2<T>({ m[1][1], -m[0][1] }, { -m[1][0], m[0][0] }) / Det; }
 
-	static constexpr Mat2<T> Identity() { return { { 1.0f, 0.0f }, { 0.0f, 1.0f } }; }
+	static constexpr Mat2<T> Identity() { return { { 1, 0 }, { 0, 1 } }; }
+	static constexpr Mat2<T> Scale(const T& s) { return { { s, 0 },{ 0, s } }; }
+	static constexpr Mat2<T> Scale(const T& x, const T& y) { return { { x, 0 }, { 0, y } }; }
 	static Mat2<T> Rotate(const T& Rad) { const T C(cosFixed(Rad)), S(sinFixed(Rad)); return { { C, S }, { -S, C } }; }
 
 private:
@@ -42,7 +44,7 @@ template<typename T> constexpr Mat2<T> operator+(const Mat2<T>& lhs, const Mat2<
 template<typename T> constexpr Mat2<T> operator-(const Mat2<T>& lhs, const Mat2<T>& rhs) { return { lhs[0] - rhs[0], lhs[1] - rhs[1] }; }
 template<typename T> constexpr Mat2<T> operator*(const Mat2<T>& lhs, const T& rhs) { return { lhs[0] * rhs, lhs[1] * rhs }; }
 template<typename T> constexpr Mat2<T> operator*(const T& lhs, const Mat2<T>& rhs) { return rhs * lhs; }
-template<typename T> constexpr Mat2<T> operator/(const Mat2<T>& lhs, const T& rhs) { return lhs * (1.0f / rhs); }
+template<typename T> constexpr Mat2<T> operator/(const Mat2<T>& lhs, const T& rhs) { return lhs * (1 / rhs); }
 template<typename T> constexpr Mat2<T> operator*(const Mat2<T>& lhs, const Mat2<T>& rhs) {
 	const auto l0 = Vec2<T>({ rhs[0][0], rhs[1][0] });
 	const auto l1 = Vec2<T>({ rhs[0][1], rhs[1][1] });
