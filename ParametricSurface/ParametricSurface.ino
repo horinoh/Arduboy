@@ -9,7 +9,7 @@
 
 #include <Arduboy2.h>
 
-#include <MathLibrary.h>
+#include <ArduMath.h>
 
 #define DRAW_PRINT
 
@@ -67,10 +67,10 @@ void CreateVertexBuffer(Vec3<Scalar>* Buffer, const int UC, const int VC, const 
 	auto Count = 0;
 	auto V = Scalar(0);
 	for (uint16_t i = 0; i < VC; ++i, V += DiffV) {
-		if (i == VC - 1) { V = Scalar(1); } //!< Œë·‚Å•Â‚¶‚È‚¢‚Ì‚ÅÅŒã‚Ì—v‘f‚ð1.0‚É•â³‚·‚é (Correct last element to 1.0)
+		if (i == VC - 1) { V = Scalar(1); } //!< ï¿½ë·ï¿½Å•Â‚ï¿½ï¿½È‚ï¿½ï¿½Ì‚ÅÅŒï¿½Ì—vï¿½fï¿½ï¿½1.0ï¿½É•â³ï¿½ï¿½ï¿½ï¿½ (Correct last element to 1.0)
 		auto U = Scalar(0);
 		for (auto j = 0; j < UC; ++j, U += DiffU, ++Count) {
-			if (j == UC - 1) { U = Scalar(1); } //!< Œë·‘Îô
+			if (j == UC - 1) { U = Scalar(1); } //!< ï¿½ë·ï¿½Îï¿½
 			switch (ST)
 			{
 			default:
@@ -124,7 +124,7 @@ void Draw(const Vec3<Scalar>* VB, const uint8_t* IB, const int PC)
 	}
 }
 
-constexpr uint8_t N = 2 * 2; //!< 2‚Ì—Ýæ‚Å‚ ‚é‚±‚Æ
+constexpr uint8_t N = 2 * 2; //!< 2ï¿½Ì—Ýï¿½Å‚ï¿½ï¿½é‚±ï¿½ï¿½
 constexpr float InvN2 = 1.0f / (N * N);
 SQ15x16 ThresholdMap[N][N];
 

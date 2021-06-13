@@ -5,12 +5,12 @@
 * ファイル - 環境設定 - 言語設定 - English(English) にした
     * 日本語文字化け対応がめんどうなので
 * ポータブル化
-    * インストール先に portable フォルダを作成する
-    * 新しい環境に移行する際は portable フォルダをコピーすればよい
+    * IDEインストール先に portable フォルダを作成する
+    * 新しい環境に移行する際は portable フォルダを持っていけばよい
 
 ### 環境設定 
 * ファイル - 環境設定 - スケッチブックの保存場所 へスケッチを配置したいフォルダを指定
-* ファイル - 環境設定 - 外部のエディタを使用する にチェックを入れるとIDEからは編集できなくなり、(Visual Studio等)外部での変更を反映してくれるようになるみたい
+* ファイル - 環境設定 - 外部のエディタを使用する にチェックを入れるとIDEからは編集できなくなり、外部での変更を反映してくれるようになるみたい
 
 ### ライブラリ
 * スケッチ - ライブラリをインクルード - ライブラリを管理
@@ -33,13 +33,16 @@
     https://arduboy.github.io/board-support/package_arduboy_index.json 
     ~~~
 * ツール - ボード - Arduino Leonardo を選択しておく
-* (USB接続してから)ツール - シリアルポート で COM?(Arduino Leonardo) を選択
+* 予め Arduboy デバイスを接続しておく
+* ツール - シリアルポートで、接続したArduboyデバイスを選択する
+    * COM1(Arduino Leonardo) とか
 
 ### サンプル
 * ファイル - スケッチ例 - Arduboy2 - Hello World 等
 
 ## エディタ
 
+<!--
 ### [VisualStudio](https://www.visualmicro.com/)
 * Extensions - Manage Extensions - Arduino IDE for Visual Studio をインストール - Visual Studio 再起動
 * Extensions - vMicro
@@ -57,6 +60,7 @@
 *  ライブラリを使う側でやること (IDEから使う場合)
     * ファイル - 環境設定 - スケッチブックの保存場所 で指定したフォルダ内の libraries フォルダ以下にライブラリを配置する
     * IDEで、スケッチ - ライブラリをインクルード - 選択肢に(配置済だと)現れるようになるので選択する
+-->
 
 ### VisualStudioCode
 * 拡張機能のインストール
@@ -69,8 +73,9 @@
         * Arduino: Board Config (もしくは右下のステータスバーから\<Select Board Type\>)
             * Arudino Leonardo (Arduino AVR Borads) を選択
         * Arduino: Select Serial Port (もしくは右下のステータスバーから\<Select Serial Port\>)
-            * 予めArduboy デバイスを接続しておく
-            * 接続したArduboyデバイスを選択する (例えば COM1 (Microsoft) とか)
+            * 予め Arduboy デバイスを接続しておく
+            * 接続したArduboyデバイスを選択する
+                * COM1 (Microsoft) とか
         * Arduino: Examples
             * サンプルを開く
             * Eamples from Custom Libraries - Arduboy - HelloWorld など
@@ -85,15 +90,16 @@
         "output": ".\\bin"
         ~~~
 #### 自前ライブラリ
-* ライブラリの作成
-    * <IDEインストール先>\portable\sketchbook\libraries 以下に MyLib フォルダを作成
-    * MyLib\MyLib.h を追加 (必要に応じて MyLib.cpp も追加)
-* ライブラリの使用 (IDEから使う場合)
-    * IDEで、Sketch - IncludeLibrary - 選択肢に現れるようになるので選択する
+* ライブラリの作成 (MyLibという名前で作る場合)
+    * MyLib フォルダを作成
+    * MyLib\MyLib.h を追加 (必要に応じて MyLib.cpp やその他 XXX.h や XXX.cpp も追加)
+* ライブラリの使用 
+    * <IDEインストール先>\portable\sketchbook\libraries 以下に MyLib を配置する
+    * IDEから Sketch - IncludeLibrary の選択肢に現れる事を確認する
 
 ## [エミュレータ](https://github.com/felipemanga/ProjectABE)
 * ビルドすると *.ino.hex ができるので、これをProjectABEにドラッグドロップ
-* バイナリが更新されると自動的に再読み込みしてくれるので、一度起動してしまえばそのまま使える
+* バイナリが更新されると自動的に再読み込みしてくれるので、一度起動してしまえばそのままでよい
 * ProjectABE.exe のフォルダを環境変数 Path に通しておいた
 
 ## ハードウエア
