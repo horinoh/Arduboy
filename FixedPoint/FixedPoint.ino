@@ -42,7 +42,7 @@ void loop() {
 	if (arduboy.nextFrame()) {
 		arduboy.pollButtons();
 
-		//!< ’è‹`‚³‚ê‚Ä‚¢‚éƒGƒCƒŠƒAƒX (Defined aliases)
+		//!< å®šç¾©ã•ã‚Œã¦ã„ã‚‹ã‚¨ã‚¤ãƒªã‚¢ã‚¹ (Defined aliases)
 		//!< UQ4x4
 		//!< UQ8x8
 		//!< UQ16x16
@@ -60,7 +60,7 @@ void loop() {
 		//!< SQ1x30
 		//!< SQ1x62
 		
-		//!< UQXXX‚Ç‚¤‚µASQXXX‚Ç‚¤‚µ‚È‚çƒLƒƒƒXƒg‚ª‰Â”\
+		//!< UQXXXã©ã†ã—ã€SQXXXã©ã†ã—ãªã‚‰ã‚­ãƒ£ã‚¹ãƒˆãŒå¯èƒ½
 		{
 			constexpr UQ8x8 u88 = 0.68f;
 			constexpr SQ7x8 s88 = 0.68f;
@@ -159,7 +159,7 @@ void loop() {
 		}
 
 #if false
-		//!< 64bitŠÖ˜A‚ÍæŽZAœŽZ‚ª‚Å‚«‚È‚¢ (64bit version cannot multiply and division ?)
+		//!< 64bité–¢é€£ã¯ä¹—ç®—ã€é™¤ç®—ãŒã§ããªã„ (64bit version cannot multiply and division ?)
 		{
 			constexpr UQ32x32 A = 1.5;
 			constexpr UQ32x32 B = 5.25;
@@ -241,6 +241,4 @@ void loop() {
 			FLOOR_CEIL(A);
 		}
 #endif
-	}
 }
-
