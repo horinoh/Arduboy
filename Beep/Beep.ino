@@ -16,6 +16,7 @@ void setup() {
 	arduboy.begin();
 	arduboy.clear();
 	arduboy.setFrameRate(60);
+	arduboy.audio.on();
 	beepPin1.begin();
 	beepPin2.begin();
 }
@@ -31,11 +32,11 @@ void loop() {
 	
 		constexpr auto Duration = 100;
 		if (arduboy.justPressed(A_BUTTON)) {
-			//!< Žü”g” : 15.26 - 1000000 Hz („§)
+			//!< å‘¨æ³¢æ•° : 15.26 - 1000000 Hz (æŽ¨å¥¨)
 			beepPin1.tone(beepPin1.freq(1000), Duration);
 		}
 		if (arduboy.justReleased(B_BUTTON)) {
-			//!< Žü”g” : 61.04 - 15625 Hz
+			//!< å‘¨æ³¢æ•° : 61.04 - 15625 Hz
 			beepPin2.tone(beepPin2.freq(1000), Duration);
 		}
 		
