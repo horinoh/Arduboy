@@ -1,6 +1,6 @@
 @echo off
 
-rem IDEでスケッチ - コンパイルしたバイナリを出力(Ctrl+Alt+S) で出力されたファイル(XXX.ino.arduino_leonardo.hex)をエミュレータで起動する
+rem IDE でコンパイルしたバイナリを出力(Ctrl+Alt+S)、出力されたファイル(XXX.ino.arduino_leonardo.hex)　をエミュレータで起動する
 rem (Invoke emulator with binary which is compiled by IDE)
 
 rem https://github.com/felipemanga/ProjectABE/releases

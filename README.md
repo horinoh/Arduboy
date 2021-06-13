@@ -1,16 +1,19 @@
 # Arduboy
 
 ## [IDE](https://www.arduino.cc/en/Main/Software#download)
+* ここでは、WindowsApp版ではなく、Zip版をインストールした
+* ファイル - 環境設定 - 言語設定 - English(English) にした
+    * 日本語文字化け対応がめんどうなので
+* ポータブル化
+    * インストール先に portable フォルダを作成する
+    * 新しい環境に移行する際は portable フォルダをコピーすればよい
 
 ### 環境設定 
-* 以下のいずれかを行う
-    * ファイル - 環境設定 - スケッチブックの保存場所 - クローンしたフォルダを指すように変更する
-    * ファイル - 環境設定 - スケッチブックの保存場所 - ここに表示されている場所へクローンする
-
-* ファイル - 環境設定 - 外部のエディタを使用する にチェックを入れると編集できなくなり、(Visual Studio等)外部での変更を反映してくれるようになるみたい
+* ファイル - 環境設定 - スケッチブックの保存場所 へスケッチを配置したいフォルダを指定
+* ファイル - 環境設定 - 外部のエディタを使用する にチェックを入れるとIDEからは編集できなくなり、(Visual Studio等)外部での変更を反映してくれるようになるみたい
 
 ### ライブラリ
-* スケッチ - ライブラリをインクルード - ライブラリを管理 - 「Arduboy」で検索する
+* スケッチ - ライブラリをインクルード - ライブラリを管理
     ~~~
     Arduboy
     Arduboy2
@@ -20,6 +23,7 @@
     ArdVoice
     ATMlib
     Arduboy-TinyFont
+
     FixedPoints
     ~~~
     
@@ -28,21 +32,22 @@
     ~~~
     https://arduboy.github.io/board-support/package_arduboy_index.json 
     ~~~
-* ツール - ボード - ボードマネージャ - Arduboyで検索してインストールする
-* ツール - ボード - Arduboy-avr - Arduboyを選択しておく
-* (USB接続してから)ツール - シリアルポート で Arduino Leonardo を選択
+* ツール - ボード - Arduino Leonardo を選択しておく
+* (USB接続してから)ツール - シリアルポート で COM?(Arduino Leonardo) を選択
 
 ### サンプル
-* ファイル - スケッチ例 から
+* ファイル - スケッチ例 - Arduboy2 - Hello World 等
 
-## [VisualStudio](https://www.visualmicro.com/)
+## エディタ
+
+### [VisualStudio](https://www.visualmicro.com/)
 * Extensions - Manage Extensions - Arduino IDE for Visual Studio をインストール - Visual Studio 再起動
 * Extensions - vMicro
     * General - Configure Arduion IDE locations - Arduion IDEをインストールしたパスを設定(多分自動設定済になっている)
     * IDE に Arduino 1.6/1.8 を選択する
     * Board に Arduino Leonardo を選択する
 
-### 自前ライブラリ
+#### 自前ライブラリ
 * ライブラリの作成 (Visual Studio)
     * Arduino Library Projectで作成、ここではXXXとする
     * ファイルの追加をする場合は、srcフォルダ以下に配置されるように追加する
@@ -53,9 +58,43 @@
     * ファイル - 環境設定 - スケッチブックの保存場所 で指定したフォルダ内の libraries フォルダ以下にライブラリを配置する
     * IDEで、スケッチ - ライブラリをインクルード - 選択肢に(配置済だと)現れるようになるので選択する
 
+### VisualStudioCode
+* 拡張機能のインストール
+    * Arduino
+    * arduino-snipepets
+* 設定
+    * 左下歯車 - Settings - User - Extensions - Arduino configration
+        * Arduino: Path に IDE のインストール先パスを指定
+    * Ctrl + Shift + P (もしくはF1) でコマンドパレットを開く
+        * Arduino: Board Config (もしくは右下のステータスバーから\<Select Board Type\>)
+            * Arudino Leonardo (Arduino AVR Borads) を選択
+        * Arduino: Select Serial Port (もしくは右下のステータスバーから\<Select Serial Port\>)
+            * 予めArduboy デバイスを接続しておく
+            * 接続したArduboyデバイスを選択する (例えば COM1 (Microsoft) とか)
+        * Arduino: Examples
+            * サンプルを開く
+            * Eamples from Custom Libraries - Arduboy - HelloWorld など
+* ビルド、実行
+    * Ctrl + Alt + R (もしくは.inoを開いて右上のアイコンから)
+        * ビルド
+    * Ctrl + Alt + U　(もしくは.inoを開いて右上のアイコンから)
+        * 実行(Arduboyへのアップロード)
+    * ビルド後にバイナリは削除されてしまう
+        * 残しておくには .vscode/arduino.json に以下のようなエントリを追加しておく
+        ~~~
+        "output": ".\\bin"
+        ~~~
+#### 自前ライブラリ
+* ライブラリの作成
+    * <IDEインストール先>\portable\sketchbook\libraries 以下に MyLib フォルダを作成
+    * MyLib\MyLib.h を追加 (必要に応じて MyLib.cpp も追加)
+* ライブラリの使用 (IDEから使う場合)
+    * IDEで、Sketch - IncludeLibrary - 選択肢に現れるようになるので選択する
+
 ## [エミュレータ](https://github.com/felipemanga/ProjectABE)
-* IDEから、スケッチ - コンパイルしたバイナリを出力 - XXX.ino.arduino_leonardo.hex というファイルができるので、これをProjectABEにドラッグドロップ
-* XXX.ino.arduino_leonardo..hexが更新されると自動的に再読み込みしてくれるので、一度起動してしまえばそのまま使える
+* ビルドすると *.ino.hex ができるので、これをProjectABEにドラッグドロップ
+* バイナリが更新されると自動的に再読み込みしてくれるので、一度起動してしまえばそのまま使える
+* ProjectABE.exe のフォルダを環境変数 Path に通しておいた
 
 ## ハードウエア
 * 上を押したまま電源を入れるとフラッシュライトモード

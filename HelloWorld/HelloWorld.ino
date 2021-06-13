@@ -5,7 +5,7 @@
 */
 
 #include <Arduboy2.h>
-#include <TinyFont.h>
+#include <Tinyfont.h>
 
 Arduboy2 arduboy;
 auto tinyfont = Tinyfont(arduboy.sBuffer, Arduboy2::width(), Arduboy2::height());
@@ -22,7 +22,7 @@ void loop() {
 	if (arduboy.nextFrame()) {
 		arduboy.clear();
 
-		//!< フォントサイズ 5x7 (Font size 5x7)
+		//!< 繝輔か繝ｳ繝医し繧､繧ｺ 5x7 (Font size 5x7)
 		{
 			constexpr auto Message = "Hello World";
 			constexpr auto StrLen = strlen(Message);
@@ -34,7 +34,7 @@ void loop() {
 			arduboy.print(Message);
 		}
 
-		//!< フォントサイズ 4x4 (Font size 4x4)
+		//!< 繝輔か繝ｳ繝医し繧､繧ｺ 4x4 (Font size 4x4)
 		{
 			constexpr auto Message = "Hello Tiny Font";
 			constexpr auto StrLen = strlen(Message);
