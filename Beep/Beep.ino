@@ -5,6 +5,7 @@
 */
 
 #include <Arduboy2.h>
+#include <ArduboyTonesPitches.h>
 
 Arduboy2 arduboy;
 
@@ -16,7 +17,13 @@ void setup() {
 	arduboy.begin();
 	arduboy.clear();
 	arduboy.setFrameRate(60);
-	arduboy.audio.on();
+	
+	//!< 【サウンドの有効無効化】
+	//!< B を押したままパワーをオンにする
+	//!< (B は押したままで)上を押すとサウンド有効
+	//!< (B は押したままで)下を押すとサウンド無効
+	//if(!arduboy.audio.enabled()) { arduboy.audio.on(); }
+
 	beepPin1.begin();
 	beepPin2.begin();
 }
@@ -26,27 +33,67 @@ void loop() {
 	if (arduboy.nextFrame()) {
 		arduboy.clear();
 
-		arduboy.pollButtons();
-		beepPin1.timer();
-		beepPin2.timer();
+		if (arduboy.audio.enabled()) {
+			arduboy.pollButtons();
+			beepPin1.timer();
+			beepPin2.timer();
 	
-		constexpr auto Duration = 100;
-		if (arduboy.justPressed(A_BUTTON)) {
-			//!< 周波数 : 15.26 - 1000000 Hz (推奨)
-			beepPin1.tone(beepPin1.freq(1000), Duration);
-		}
-		if (arduboy.justReleased(B_BUTTON)) {
-			//!< 周波数 : 61.04 - 15625 Hz
-			beepPin2.tone(beepPin2.freq(1000), Duration);
-		}
+			constexpr auto Duration = 100;
+
+			if (arduboy.pressed(A_BUTTON)) {
+				//!< ソ (G4)
+				if (arduboy.justPressed(UP_BUTTON)) {
+					beepPin1.tone(beepPin1.freq(NOTE_G4), Duration);
+				}
+				//!< ラ (A4)
+				if (arduboy.justPressed(DOWN_BUTTON)) {
+					beepPin1.tone(beepPin1.freq(NOTE_A4), Duration);
+				}
+				//!< シ (B4)
+				if (arduboy.justPressed(LEFT_BUTTON)) {
+					beepPin1.tone(beepPin1.freq(NOTE_B4), Duration);
+				}
+				//!< ド (C5)
+				if (arduboy.justPressed(RIGHT_BUTTON)) {
+					beepPin1.tone(beepPin1.freq(NOTE_C5), Duration);
+				}
+			} else {
+				//!< ド (C4)
+				if (arduboy.justPressed(UP_BUTTON)) {
+					beepPin1.tone(beepPin1.freq(NOTE_C4), Duration);
+				}
+				//!< レ (D4)
+				if (arduboy.justPressed(DOWN_BUTTON)) {
+					beepPin1.tone(beepPin1.freq(NOTE_D4), Duration);
+				}
+				//!< ミ (E4)
+				if (arduboy.justPressed(LEFT_BUTTON)) {
+					beepPin1.tone(beepPin1.freq(NOTE_E4), Duration);
+				}
+				//!< ファ (F4)
+				if (arduboy.justPressed(RIGHT_BUTTON)) {
+					beepPin1.tone(beepPin1.freq(NOTE_F4), Duration);
+				}
+			}
+
+			if (arduboy.justReleased(B_BUTTON)) {
+				beepPin1.noTone();
+				beepPin2.noTone();
+			}
 		
-		if (beepPin1.duration) {
 			arduboy.setCursor(0, 0);
-			arduboy.print("Beep1 playing");
-		}
-		if (beepPin2.duration) {
-			arduboy.setCursor(0, 8);
-			arduboy.print("Beep2 playing");
+			arduboy.print("Sound Enabled");
+			if (beepPin1.duration) {
+				arduboy.setCursor(0, 8);
+				arduboy.print("Beep1 playing");
+			}
+			if (beepPin2.duration) {
+				arduboy.setCursor(0, 16);
+				arduboy.print("Beep2 playing");
+			}
+		} else {
+			arduboy.setCursor(0, 0);
+			arduboy.print("Sound Disabled");
 		}
 
 		arduboy.display();
