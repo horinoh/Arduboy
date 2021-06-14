@@ -4,10 +4,16 @@
 Arduboy2 arduboy;
 ArduboyPlaytune tunes(arduboy.audio.enabled);
 
+//!< 【MIDIのコンバート】
 //!< midi2tones (https://github.com/MLXXXp/midi2tones) で MIDI ファイルをコードへ変換
 //!< XXX.mid の場合、以下のように拡張子を省略してベースネームで引数に指定する
 //!< $midi2tones_64bit.exe XXX
 //!< XXX.c が出力されるので、ソースへ取り込んで使う (ここでは Score.h へリネームしてインクルードしている)
+
+#define PLAY(channel, duration) TUNE_OP_PLAYNOTE | channel, duration
+#define STOP(channel) TUNE_OP_STOPNOTE | channel
+#define WAIT(duration) (duration & 0x7f00) >> 8, duration & 0x00ff
+
 #include "Score.h"
 
 // the setup function runs once when you press reset or power the board
