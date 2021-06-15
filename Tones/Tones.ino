@@ -10,6 +10,11 @@
 Arduboy2 arduboy;
 ArduboyTones tones(arduboy.audio.enabled);
 
+//!< 【MIDIのコンバート】
+//!< midi2tones (https://github.com/MLXXXp/midi2tones) で MIDI ファイルをコードへ変換
+//!< XXX.mid の場合、以下のように拡張子を省略してベースネームで引数に指定する
+//!< $midi2tones_64bit.exe -o2 XXX
+//!< XXX.c が出力されるので、ソースへ取り込んで使う (ここでは Score.h へリネームしてインクルードしている)
 #include "Score.h"
 
 //!< const PROGMEM でないスコアは tonesInRAM() で再生する (スコアを動的に変化させる場合等に使用)
