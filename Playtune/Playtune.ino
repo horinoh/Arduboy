@@ -26,6 +26,8 @@ void setup() {
   	tunes.initChannel(PIN_SPEAKER_2);
 	//!< トーンの再生中、スコアをミュートする場合には ture
 	tunes.toneMutesScore(false);
+
+	tunes.playScore(score);
 }
 
 // the loop function runs over and over again until power down or reset
@@ -33,8 +35,17 @@ void loop() {
 	if (arduboy.nextFrame()) {
 		arduboy.clear();
 
-		if(!tunes.playing()) {
-			tunes.playScore(score);
+		arduboy.pollButtons();
+
+		if(arduboy.justPressed(A_BUTTON)){
+			if(!tunes.playing()) {
+				tunes.playScore(score);
+			}
+		}
+		if(arduboy.justPressed(B_BUTTON)){
+			if(tunes.playing()) {
+				tunes.stopScore();
+			}
 		}
 
 		arduboy.setCursor(0, 0);
