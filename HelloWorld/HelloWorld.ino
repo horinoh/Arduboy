@@ -1,9 +1,3 @@
-/*
- Name:		HelloWorld.ino
- Created:	10/10/2020 3:48:18 PM
- Author:	horin
-*/
-
 #include <Arduboy2.h>
 #include <Tinyfont.h>
 

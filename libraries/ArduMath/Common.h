@@ -27,10 +27,10 @@ template<typename T> constexpr T mixFixed(const T& lhs, const T& rhs, const T& t
 template<typename T> constexpr T toRadian(const T& lhs) { return lhs / 180.0f * T::Pi; }
 template<typename T> constexpr T toDegree(const T& lhs) { return lhs / T::Pi * 180.0f; }
 
-template<typename T> constexpr T sinFixed(const T& radian) { return T(sin(static_cast<float>(radian))); } //!< #TODO ˆê’Ufloat‚É‚µ‚Ä‚¢‚é
-template<typename T> constexpr T cosFixed(const T& radian) { return T(cos(static_cast<float>(radian))); } //!< #TODO ˆê’Ufloat‚É‚µ‚Ä‚¢‚é
+template<typename T> constexpr T sinFixed(const T& radian) { return T(sin(static_cast<float>(radian))); } //!< #TODO ä¸€æ—¦floatã«ã—ã¦ã„ã‚‹
+template<typename T> constexpr T cosFixed(const T& radian) { return T(cos(static_cast<float>(radian))); } //!< #TODO ä¸€æ—¦floatã«ã—ã¦ã„ã‚‹
 
-template<typename T> constexpr T sqrtFixed(const T& lhs) { return T(sqrt(static_cast<float>(lhs))); } //!< #TODO ˆê’Ufloat‚É‚µ‚Ä‚¢‚é
+template<typename T> constexpr T sqrtFixed(const T& lhs) { return T(sqrt(static_cast<float>(lhs))); } //!< #TODO ä¸€æ—¦floatã«ã—ã¦ã„ã‚‹
 
 
 // M_2n = 1/(2n)^2 * [4 * M_n + 0, 4 * M_n + 2] 
@@ -52,13 +52,13 @@ template<typename T> constexpr T sqrtFixed(const T& lhs) { return T(sqrt(static_
 // 48 16 56 24 48 16 56 24 + 3 3 3 3 1 1 1 1 = 51 19 59 27 49 17 57 25
 // 12 44  4 36 12 44  4 36 + 3 3 3 3 1 1 1 1 = 15 47  7 39 13 45  5 37
 // 60 28 52 20 60 28 52 20 + 3 3 3 3 1 1 1 1 = 63 31 55 23 61 29 53 21
-//!< C++11‚Å‚ÍconstexorŠÖ”‚Íreturn‚Ìˆê•¶‚Ì‚Ý‚Å‚È‚¢‚Æ‚¢‚¯‚È‚¢‚Ì‚Å’ˆÓ (In C++11, constexpr function must be one return sentence only)
+//!< C++11ã§ã¯constexoré–¢æ•°ã¯returnã®ä¸€æ–‡ã®ã¿ã§ãªã„ã¨ã„ã‘ãªã„ã®ã§æ³¨æ„ (In C++11, constexpr function must be one return sentence only)
 constexpr uint8_t Bayer(const uint8_t i, const uint8_t j, const uint8_t n)
 {
-	//!< [ 4 * M_n, 4 * M_n ] •”
+	//!< [ 4 * M_n, 4 * M_n ] éƒ¨
 	//!< [ 4 * M_n, 4 * M_n ]
 	return (n > 2 ? (Bayer(i % (n >> 1), j % (n >> 1), n >> 1) << 2) : 0)
-		//!< [ 0, 2 ] •”
+		//!< [ 0, 2 ] éƒ¨
 		//!< [ 3, 1 ]
 		+ i / (n >> 1) | ((((i / (n >> 1)) & 1) ? !(j / (n >> 1)) : (j / (n >> 1))) << 1);
 }

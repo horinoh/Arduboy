@@ -1,9 +1,3 @@
-/*
- Name:		ParametricSurface.ino
- Created:	10/24/2020 12:36:21 AM
- Author:	horin
-*/
-
 //!< Parametric Surface
 //!< cf) http://www.3d-meier.de/tut3/Seite0.html
 

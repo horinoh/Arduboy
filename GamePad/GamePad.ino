@@ -1,9 +1,3 @@
-/*
- Name:		GamePad.ino
- Created:	10/10/2020 4:14:22 PM
- Author:	horin
-*/
-
 #include <Arduboy2.h>
 
 Arduboy2 arduboy;
@@ -21,7 +15,7 @@ void loop() {
 	if (arduboy.nextFrame()) {
 		arduboy.clear();
 
-		//!< justPressed()“™‚ðŽg‚¤ê‡‚É‚Í•K{ (Need to use justPressed(), etc)
+		//!< justPressed()ç­‰ã‚’ä½¿ã†å ´åˆã«ã¯å¿…é ˆ (Need to use justPressed(), etc)
 		arduboy.pollButtons();
 
 		{
@@ -31,7 +25,7 @@ void loop() {
 			arduboy.drawFastVLine(Arduboy2::width() - 1, 0, Arduboy2::height() - 1, WHITE);
 		}
 
-		//!< ƒJ[ƒ\ƒ‹‚ÌˆÚ“® (Move cursor)
+		//!< ã‚«ãƒ¼ã‚½ãƒ«ã®ç§»å‹• (Move cursor)
 		{
 			constexpr auto Radius = 4;
 			{
@@ -47,7 +41,7 @@ void loop() {
 			}
 		}
 
-		//!< ƒ{ƒ^ƒ“ó‘Ô‚ð•`‰æ (Draw button state)
+		//!< ãƒœã‚¿ãƒ³çŠ¶æ…‹ã‚’æç”» (Draw button state)
 		{
 			constexpr auto Radius = 8;
 			constexpr auto Spacing = Radius * 2;

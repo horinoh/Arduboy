@@ -1,9 +1,3 @@
-/*
- Name:		Dither.ino
- Created:	10/13/2020 10:35:52 PM
- Author:	horin
-*/
-
 #include <Arduboy2.h>
 #include <FixedPoints.h>
 #include <FixedPointsCommon.h>
@@ -33,18 +27,18 @@ Arduboy2 arduboy;
 // 12 44  4 36 12 44  4 36 + 3 3 3 3 1 1 1 1 = 15 47  7 39 13 45  5 37
 // 60 28 52 20 60 28 52 20 + 3 3 3 3 1 1 1 1 = 63 31 55 23 61 29 53 21
 
-//!< C++11‚Å‚ÍconstexorŠÖ”‚Íreturn‚Ìˆê•¶‚Ì‚Ý‚Å‚È‚¢‚Æ‚¢‚¯‚È‚¢‚Ì‚Å’ˆÓ (In C++11, constexpr function must be one return sentence only)
+//!< C++11ã§ã¯constexoré–¢æ•°ã¯returnã®ä¸€æ–‡ã®ã¿ã§ãªã„ã¨ã„ã‘ãªã„ã®ã§æ³¨æ„ (In C++11, constexpr function must be one return sentence only)
 constexpr uint8_t Bayer(const uint8_t i, const uint8_t j, const uint8_t n)
 {
-	//!< [ 4 * M_n, 4 * M_n ] •”
+	//!< [ 4 * M_n, 4 * M_n ] éƒ¨
 	//!< [ 4 * M_n, 4 * M_n ]
 	return (n > 2 ? (Bayer(i % (n >> 1), j % (n >> 1), n >> 1) << 2) : 0)
-		//!< [ 0, 2 ] •”
+		//!< [ 0, 2 ] éƒ¨
 		//!< [ 3, 1 ]
 		+ i / (n >> 1) | ((((i / (n >> 1)) & 1) ? !(j / (n >> 1)) : (j / (n >> 1))) << 1);
 }
 
-constexpr uint8_t N = 2 * 2; //!< 2‚Ì—Ýæ‚Å‚ ‚é‚±‚Æ
+constexpr uint8_t N = 2 * 2; //!< 2ã®ç´¯ä¹—ã§ã‚ã‚‹ã“ã¨
 constexpr float InvN2 = 1.0f / (N * N);
 SQ15x16 ThresholdMap[N][N];
 

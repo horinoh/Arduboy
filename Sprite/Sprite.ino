@@ -1,16 +1,10 @@
-/*
- Name:		Sprite.ino
- Created:	10/18/2020 4:40:58 PM
- Author:	horin
-*/
-
 #include <Arduboy2.h>
 #include <Sprites.h>
 
 Arduboy2 arduboy;
 Sprites sprites;
 
-//!< ƒAƒjƒ[ƒVƒ‡ƒ“ƒf[ƒ^‚Í https://github.com/Team-ARG-Museum/ID-46-Arduventure ‚Ìƒf[ƒ^‚ðŽg‚í‚¹‚Ä‚à‚ç‚Á‚Ä‚¢‚é
+//!< ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‡ãƒ¼ã‚¿ã¯ https://github.com/Team-ARG-Museum/ID-46-Arduventure ã®ãƒ‡ãƒ¼ã‚¿ã‚’ä½¿ã‚ã›ã¦ã‚‚ã‚‰ã£ã¦ã„ã‚‹
 
 const unsigned char PROGMEM eyesBlinking[] =
 {
@@ -138,7 +132,7 @@ void loop() {
 		const auto CharaWidth = playerHead_plus_mask_Width/*playerFeet_plus_mask_Width*/;
 		const auto CharaHeight = playerHead_plus_mask_Height + playerFeet_plus_mask_Height;
 
-		//!< •ûŒü–ˆ‚Ìƒpƒ^[ƒ“
+		//!< æ–¹å‘æ¯Žã®ãƒ‘ã‚¿ãƒ¼ãƒ³
 		//!<    2
 		//!<  1   3
 		//!<    0
@@ -154,26 +148,26 @@ void loop() {
 
 		const auto AnimFrame = arduboy.frameCount / 10;
 
-		//!< •ûŒü–ˆ‚É‚ ‚é‚Ì‚Å 3 * 4 = 12ƒtƒŒ[ƒ€•ª‚ ‚é
-		//!< 0, 1, 2 : •àsƒAƒjƒ[ƒVƒ‡ƒ“A1‚Í’âŽ~ƒAƒjƒ[ƒVƒ‡ƒ“‚Æ‚µ‚Ä‚àŽg‚¤
+		//!< æ–¹å‘æ¯Žã«ã‚ã‚‹ã®ã§ 3 * 4 = 12ãƒ•ãƒ¬ãƒ¼ãƒ åˆ†ã‚ã‚‹
+		//!< 0, 1, 2 : æ­©è¡Œã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã€1ã¯åœæ­¢ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã¨ã—ã¦ã‚‚ä½¿ã†
 		auto FeetAnim = FeetAnimSeq[AnimFrame % COUNTOF(FeetAnimSeq)];
 		auto HeadMove = -(AnimFrame % 2) + 1;
-		//!< 1 : ’âŽ~ 
+		//!< 1 : åœæ­¢ 
 		if (arduboy.notPressed(UP_BUTTON) && arduboy.notPressed(DOWN_BUTTON) && arduboy.notPressed(LEFT_BUTTON) && arduboy.notPressed(RIGHT_BUTTON)) { 
 			FeetAnim = 1; 
 			HeadMove = 0;
 		}
 	
-		//!< “ª
+		//!< é ­
 		sprites.drawPlusMask(X, Y + HeadMove, playerHead_plus_mask, Direction);
-		//!< ‘«
+		//!< è¶³
 		sprites.drawPlusMask(X, Y + playerHead_plus_mask_Height, playerFeet_plus_mask, Direction * 3 + FeetAnim);
-		//!< –Ú
+		//!< ç›®
 		if (1 == FeetAnim && 0 == Direction) {
 			sprites.drawSelfMasked(X + 4, Y + 7, eyesBlinking, AnimFrame % eyesBlinking_Frame);
 		}
 
-		//!< ƒXƒvƒ‰ƒCƒg•`‰æŠÖ”ƒoƒŠƒG[ƒVƒ‡ƒ“ (Sprite function variation)
+		//!< ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»é–¢æ•°ãƒãƒªã‚¨ãƒ¼ã‚·ãƒ§ãƒ³ (Sprite function variation)
 		//sprites.drawExternalMask(x, y, XXX, YYY, Frame);
 		//sprites.drawPlusMask(x, y, XXX, Frame);
 		//sprites.drawOverwrite(x, y, XXX, Frame);

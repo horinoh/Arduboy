@@ -1,9 +1,3 @@
-/*
- Name:		FixedPoint.ino
- Created:	10/11/2020 4:59:24 PM
- Author:	horin
-*/
-
 #include <Arduboy2.h>
 #include <FixedPoints.h>
 #include <FixedPointsCommon.h>

@@ -1,9 +1,3 @@
-/*
- Name:		FrameBuffer.ino
- Created:	10/10/2020 6:56:22 PM
- Author:	horin
-*/
-
 #include <Arduboy2.h>
 
 #include <FixedPoints.h>
@@ -30,28 +24,28 @@ void loop() {
 		auto Buffer = arduboy.getBuffer();
 
 		//!< ---------------------------------------------------
-		//!< Å‰‚Ì8bit‚ª1—ñ–Ú‚Ì8s(0-7)•ªAŽŸ‚Ì8bit‚ª2—ñ–Ú‚Ì8s•ªA... 127—ñ–Ú‚Ü‚Ås‚Á‚½‚ç
-		//!< ‚³‚ç‚É8s•ª‰º(8-15)‚Ì1—ñ–Ú‚©‚çŽn‚Ü‚èAˆÈ‰º“¯—l‚ÌŒJ‚è•Ô‚µ
-		//!< 64/8 = 8‰ñŒJ‚è•Ô‚³‚ê‚éŽ–‚É‚È‚é
+		//!< æœ€åˆã®8bitãŒ1åˆ—ç›®ã®8è¡Œ(0-7)åˆ†ã€æ¬¡ã®8bitãŒ2åˆ—ç›®ã®8è¡Œåˆ†ã€... 127åˆ—ç›®ã¾ã§è¡Œã£ãŸã‚‰
+		//!< ã•ã‚‰ã«8è¡Œåˆ†ä¸‹(8-15)ã®1åˆ—ç›®ã‹ã‚‰å§‹ã¾ã‚Šã€ä»¥ä¸‹åŒæ§˜ã®ç¹°ã‚Šè¿”ã—
+		//!< 64/8 = 8å›žç¹°ã‚Šè¿”ã•ã‚Œã‚‹äº‹ã«ãªã‚‹
 		//!< ---------------------------------------------------
-		//!< (0 - 7 s–Ú)
+		//!< (0 - 7 è¡Œç›®)
 		//!< [0] [1] ... [127]
 		//!<  0   8       1016(=127x8)
 		//!<  1   9       1017
 		//!<  ... ...     ...
 		//!<  7   15      1023
 
-		//!< (8 - 15 s–Ú)
+		//!< (8 - 15 è¡Œç›®)
 		//!< [128] ... [255]
 
 		//!< ...
 
-		//!< (56 - 63 s–Ú)
+		//!< (56 - 63 è¡Œç›®)
 		//!< [896(=128x7)] ... [1023]
 		//!< ---------------------------------------------------
 
 #if 1
-		//!< (0 - 7 s–Ú) ¶ã8x8‚ÉŽOŠpŒ`‚ð•`‰æ‚·‚é (0-7 lines, Draw 8x8 triangle on top left)
+		//!< (0 - 7 è¡Œç›®) å·¦ä¸Š8x8ã«ä¸‰è§’å½¢ã‚’æç”»ã™ã‚‹ (0-7 lines, Draw 8x8 triangle on top left)
 		//!< *-------
 		//!< **------
 		//!< ***-----
@@ -70,25 +64,25 @@ void loop() {
 		Buffer[7] = 0x80; //!< 1000 0000
 
 		constexpr auto Width = Arduboy2::width();
-		//!< (8 - 15 s–Ú) ƒ‰ƒ“ƒ_ƒ€ (8-15 lines, Random)
+		//!< (8 - 15 è¡Œç›®) ãƒ©ãƒ³ãƒ€ãƒ  (8-15 lines, Random)
 		for (auto i = 0; i < Width; ++i) { Buffer[i + Width] = rand() & 0xff; }
 
-		//!< (16 - 23 s–Ú) ”’“h‚è (16-23 lines, Fill white)
+		//!< (16 - 23 è¡Œç›®) ç™½å¡—ã‚Š (16-23 lines, Fill white)
 		for (auto i = 0; i < Width; ++i) { Buffer[i + Width * 2] = 0xff; }
 
-		//!< (24 - 31 s–Ú) •“h‚è (24-31 lines, Fill black)
+		//!< (24 - 31 è¡Œç›®) é»’å¡—ã‚Š (24-31 lines, Fill black)
 		for (auto i = 0; i < Width; ++i) { Buffer[i + Width * 3] = 0x00; }
 
-		//!< (32 - 39 s–Ú) Žs¼–Í—l (32-39 lines, Checkered pattern)
+		//!< (32 - 39 è¡Œç›®) å¸‚æ¾æ¨¡æ§˜ (32-39 lines, Checkered pattern)
 		for (auto i = 0; i < Width; ++i) { Buffer[i + Width * 4] = (i & 1) ? 0xaa : 0x55; } //!< 1010 1010 or 0101 0101
 		
-		//!< (40 - 47 s–Ú) ‰¡ŽÈ (40-47 lines, Horizontal stripes)
+		//!< (40 - 47 è¡Œç›®) æ¨ªç¸ž (40-47 lines, Horizontal stripes)
 		for (auto i = 0; i < Width; ++i) { Buffer[i + Width * 5] = 0xaa; } //!< 1010 1010
 
-		//!< (48 - 55 s–Ú) cŽÈ (48-55 lines, Virtical stripes)
+		//!< (48 - 55 è¡Œç›®) ç¸¦ç¸ž (48-55 lines, Virtical stripes)
 		for (auto i = 0; i < Width; ++i) { Buffer[i + Width * 6] = (i & 1) ? 0xff : 0x00; } //!< 1111 1111 or 0000 0000
 
-		//!< (56 - 63 s–Ú) (56-63 lines, ...)
+		//!< (56 - 63 è¡Œç›®) (56-63 lines, ...)
 		for (auto i = 0; i < Width; ++i) { Buffer[i + Width * 7] = (i > Width / 2) ? 0xf0 : 0x0f; } //!< 1111 0000 or 0000 1111
 
 		//const auto End = millis();
@@ -123,7 +117,7 @@ void loop() {
 			}
 		}
 #else
-		//!< ƒ‰ƒ“ƒ_ƒ€ (Random)
+		//!< ãƒ©ãƒ³ãƒ€ãƒ  (Random)
 		for (auto i = 0; i < Arduboy2::width() * Arduboy2::height() / 8; ++i) {
 			arduboy.paint8Pixels(rand() & 0xff);
 		}
