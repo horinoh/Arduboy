@@ -27,9 +27,6 @@ struct MyStruct
 	uint16_t Value16;
 	uint32_t Value32;
 };
-//!< 12, 3456, deadbeef
-constexpr MyStruct MyData = { 0x12, 0x5634, 0xefbeadde };
-constexpr MyStruct ZeroData = { 0, 0, 0 };
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -43,25 +40,23 @@ void loop() {
 	if (arduboy.nextFrame()) {
 		arduboy.pollButtons();
 
-		//!< A or B ボタンが押された
-		if (arduboy.justPressed(A_BUTTON) || arduboy.justPressed(B_BUTTON)) { 
-			int Adr = EEPROM_STORAGE_SPACE_START;
-			if(arduboy.justPressed(A_BUTTON)){
-				//!< A が押された場合は、最初のアドレスにランダム値、続くアドレスに MyData を書き込む
-				arduboy.initRandomSeed();
-				EEPROM.update(Adr, static_cast<byte>(random(0, 256)));
-				++Adr;
+		int Adr = EEPROM_STORAGE_SPACE_START;
+		if(arduboy.justPressed(A_BUTTON)){
+			//!< A が押された場合は、最初のアドレスにランダム値、続くアドレスに MyData を書き込む
+			arduboy.initRandomSeed();
+			EEPROM.update(Adr, static_cast<byte>(random(0, 256)));
+			++Adr;
 
-				EEPROM.put(Adr, MyData);
-				Adr += sizeof(MyData);
-			} else {
-				//!< B が押された場合にはゼロクリアする
-				EEPROM[Adr] = 0;
-				++Adr;
+			//!< 12, 3456, deadbeef
+			EEPROM.put(Adr, MyStruct({ 0x12, 0x5634, 0xefbeadde }));
+			Adr += sizeof(MyStruct);
+		} else if(arduboy.justPressed(B_BUTTON)) {
+			//!< B が押された場合にはゼロクリアする
+			EEPROM[Adr] = 0;
+			++Adr;
 
-				EEPROM.put(Adr, ZeroData);
-				Adr += sizeof(ZeroData);
-			}
+			EEPROM.put(Adr, MyStruct({0, 0, 0}));
+			Adr += sizeof(MyStruct);
 		}
 
 		{

@@ -61,10 +61,10 @@ void CreateVertexBuffer(Vec3<Scalar>* Buffer, const int UC, const int VC, const 
 	auto Count = 0;
 	auto V = Scalar(0);
 	for (uint16_t i = 0; i < VC; ++i, V += DiffV) {
-		if (i == VC - 1) { V = Scalar(1); } //!< �덷�ŕ��Ȃ��̂ōŌ�̗v�f��1.0�ɕ␳���� (Correct last element to 1.0)
+		if (i == VC - 1) { V = Scalar(1); } //!< 誤差で閉じないので最後の要素を1.0に補正する (Correct last element to 1.0)
 		auto U = Scalar(0);
 		for (auto j = 0; j < UC; ++j, U += DiffU, ++Count) {
-			if (j == UC - 1) { U = Scalar(1); } //!< �덷�΍�
+			if (j == UC - 1) { U = Scalar(1); } //!< 誤差対策
 			switch (ST)
 			{
 			default:
@@ -118,7 +118,7 @@ void Draw(const Vec3<Scalar>* VB, const uint8_t* IB, const int PC)
 	}
 }
 
-constexpr uint8_t N = 2 * 2; //!< 2�̗ݏ�ł��邱��
+constexpr uint8_t N = 2 * 2; //!< 2の累乗であること
 constexpr float InvN2 = 1.0f / (N * N);
 SQ15x16 ThresholdMap[N][N];
 
