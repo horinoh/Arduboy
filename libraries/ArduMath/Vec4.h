@@ -6,7 +6,7 @@
 #include <FixedPoints.h>
 #include <FixedPointsCommon.h>
 
-#include <Math.h>
+#include <MathCmn.h>
 
 template<typename T = SQ7x8>
 class Vec4

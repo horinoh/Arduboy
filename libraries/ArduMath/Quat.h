@@ -6,7 +6,7 @@
 #include <FixedPoints.h>
 #include <FixedPointsCommon.h>
 
-#include <Math.h>
+#include <MathCmn.h>
 #include <Mat3.h>
 
 template<typename T = SQ7x8>

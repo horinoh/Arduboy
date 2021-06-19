@@ -95,6 +95,10 @@
     * MyLib\MyLib.h を追加 (必要に応じて MyLib.cpp やその他 XXX.h や XXX.cpp も追加)
 * ライブラリの使用 
     * <IDEインストール先>\portable\sketchbook\libraries 以下に MyLib を配置する
+    * もしくはシンボリックリンクを作っておいてもよい
+        ~~~
+        $mklink /d  <IDEインストール先>\portable\sketchbook\libraries\MyLib YYY\MyLib
+        ~~~
     * IDEから Sketch - IncludeLibrary の選択肢に現れる事を確認する
 
 ## [エミュレータ](https://github.com/felipemanga/ProjectABE)
