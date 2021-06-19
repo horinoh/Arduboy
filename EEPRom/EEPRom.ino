@@ -42,16 +42,16 @@ void loop() {
 
 		int Adr = EEPROM_STORAGE_SPACE_START;
 		if(arduboy.justPressed(A_BUTTON)){
-			//!< A が押された場合は、最初のアドレスにランダム値、続くアドレスに MyData を書き込む
+			//!< A が押された場合は、最初のアドレスにランダム値、続くアドレスに MyStruct を書き込む (When A pressed, write random to first byte, write MyStruct to following bytes)
 			arduboy.initRandomSeed();
 			EEPROM.update(Adr, static_cast<byte>(random(0, 256)));
 			++Adr;
 
-			//!< 12, 3456, deadbeef
+			//!< 0x12, 0x3456, 0xdeadbeef
 			EEPROM.put(Adr, MyStruct({ 0x12, 0x5634, 0xefbeadde }));
 			Adr += sizeof(MyStruct);
 		} else if(arduboy.justPressed(B_BUTTON)) {
-			//!< B が押された場合にはゼロクリアする
+			//!< B が押された場合にはゼロクリアする (When B pressed, zero clear)
 			EEPROM[Adr] = 0;
 			++Adr;
 

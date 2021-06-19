@@ -1,13 +1,7 @@
-// Mat3.h
+#ifndef _MAT3_h
+#define _MAT3_h
 
-#ifndef _Mat3_h
-#define _Mat3_h
-
-#if defined(ARDUINO) && ARDUINO >= 100
-	#include "arduino.h"
-#else
-	#include "WProgram.h"
-#endif
+#include "Ardu.h"
 
 #include <FixedPoints.h>
 #include <FixedPointsCommon.h>
@@ -23,6 +17,7 @@ public:
 	Mat3() { *this = Identity(); }
 	Mat3(const Vec3<T>& c0, const Vec3<T>& c1, const Vec3<T>& c2) { m[0] = c0; m[1] = c1; m[2] = c2; }
 	/*
+	#TODO
 	Mat3(const Quat<T>& q) {
 		const auto xx = q.X() * q.X();
 		const auto yy = q.Y() * q.Y();

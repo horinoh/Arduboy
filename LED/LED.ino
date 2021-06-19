@@ -18,6 +18,7 @@ enum class ColorComponent {
 };
 ColorComponent ColorComp = ColorComponent::RED;
 
+//!< ColorComponent::RED -> RED_LED
 uint8_t ToLEDPin[] = {
 	RED_LED,
   	GREEN_LED,
@@ -67,36 +68,36 @@ void loop() {
 		arduboy.clear();
 		arduboy.pollButtons();
 
-		//!< アナログ、デジタルモード切替え(トグル)
+		//!< アナログ、デジタルモード切替え(トグル) (Toggle analog and digital mode)
 		if (arduboy.justPressed(A_BUTTON)){
 			Mode = Mode == LEDMode::ANALOG ? LEDMode::DIGITAL : LEDMode::ANALOG;
 			onModeChange(Mode);
 		}
 		auto isAnalogMode = Mode == LEDMode::ANALOG;
 
-		//!< デジタルモードのカラーをランダムに変更
+		//!< デジタルモードのカラーをランダムに変更 (When digital mode, set random color)
 		if(!isAnalogMode){
 			if (arduboy.justPressed(B_BUTTON)){
-				const uint8_t* Candidates[] = { DigitalRED, DigitalGREEN, DigitalBLUE, DigitalCYAN, DigitalMAGENTA, DigitalYELLOW, DigitalWHITE, DigitalBLACK };
+				constexpr uint8_t* Candidates[] = { DigitalRED, DigitalGREEN, DigitalBLUE, DigitalCYAN, DigitalMAGENTA, DigitalYELLOW, DigitalWHITE, DigitalBLACK };
 				memcpy(DigitalState, Candidates[rand() % (sizeof(Candidates)/sizeof(Candidates[0]))], sizeof(DigitalState));
 				arduboy.digitalWriteRGB(DigitalState[static_cast<uint8_t>(ColorComponent::RED)], DigitalState[static_cast<uint8_t>(ColorComponent::GREEN)], DigitalState[static_cast<uint8_t>(ColorComponent::BLUE)]);
 			}
 		}
 
-		//!< カラーコンポーネントの選択
+		//!< カラーコンポーネント(RGB)の選択 (Select color component)
 		auto i = static_cast<uint8_t>(ColorComp);
 		if (arduboy.justPressed(LEFT_BUTTON) && i > 0) { i--; }
 		if (arduboy.justPressed(RIGHT_BUTTON) && i < static_cast<uint8_t>(ColorComponent::BLUE)) { i++; }
 		ColorComp = static_cast<ColorComponent>(i);	
 
 		if(isAnalogMode){
-			//!< カラーインテンシティの変更
+			//!< アナログモードの場合、カラーインテンシティの変更 (When analog mode, change color intensity)
 			if (arduboy.pressed(UP_BUTTON) && AnalogState[i] < 0xff) { AnalogState[i]++; }
 			if (arduboy.pressed(DOWN_BUTTON) && AnalogState[i] > 0) { AnalogState[i]--; }
 			
 			arduboy.setRGBled(ToLEDPin[i], AnalogState[i]);
 		} else {
-			//!< カラーのオンオフ
+			//!< デジタルモードの場合、カラーのオンオフ (When digital mode, color on off)
 			if (arduboy.justPressed(UP_BUTTON)) { DigitalState[i] = RGB_ON; }
 			if (arduboy.justPressed(DOWN_BUTTON)) { DigitalState[i] = RGB_OFF; }
 			

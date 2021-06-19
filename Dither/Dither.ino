@@ -2,44 +2,13 @@
 #include <FixedPoints.h>
 #include <FixedPointsCommon.h>
 
+#include <ArduMath.h>
+
 Arduboy2 arduboy;
 
-// M_2n = 1/(2n)^2 * [4 * M_n + 0, 4 * M_n + 2] 
-//		             [4 * M_n + 3, 4 * M_n + 1]
-
-// [2 x 2]
-// 0 2
-// 3 1
-
-// [4 x 4]
-//  0  8  0  8 + 0 0 2 2 =  0  8  2 10
-// 12  4 12  4 + 0 0 2 2 = 12  4 14  6
-//  0  8  0  8 + 3 3 1 1 =  3 11  1  9
-// 12  4 12  4 + 3 3 1 1 = 15  7 13  5
-
-// [8 x 8]
-//  0 32  8 40  0 32  8 40 + 0 0 0 0 2 2 2 2 =  0 32  8 40  2 34 10 42
-// 48 16 56 24 48 16 56 24 + 0 0 0 0 2 2 2 2 = 48 16 56 24 50 18 58 26
-// 12 44  4 36 12 44  4 36 + 0 0 0 0 2 2 2 2 = 12 44  4 36 14 46  6 38
-// 60 28 52 20 60 28 52 20 + 0 0 0 0 2 2 2 2 = 60 28 52 20 62 30 54 22
-//  0 32  8 40  0 32  8 40 + 3 3 3 3 1 1 1 1 =  3 35 11 43  1 33  9 41
-// 48 16 56 24 48 16 56 24 + 3 3 3 3 1 1 1 1 = 51 19 59 27 49 17 57 25
-// 12 44  4 36 12 44  4 36 + 3 3 3 3 1 1 1 1 = 15 47  7 39 13 45  5 37
-// 60 28 52 20 60 28 52 20 + 3 3 3 3 1 1 1 1 = 63 31 55 23 61 29 53 21
-
-//!< C++11ではconstexor関数はreturnの一文のみでないといけないので注意 (In C++11, constexpr function must be one return sentence only)
-constexpr uint8_t Bayer(const uint8_t i, const uint8_t j, const uint8_t n)
-{
-	//!< [ 4 * M_n, 4 * M_n ] 部
-	//!< [ 4 * M_n, 4 * M_n ]
-	return (n > 2 ? (Bayer(i % (n >> 1), j % (n >> 1), n >> 1) << 2) : 0)
-		//!< [ 0, 2 ] 部
-		//!< [ 3, 1 ]
-		+ i / (n >> 1) | ((((i / (n >> 1)) & 1) ? !(j / (n >> 1)) : (j / (n >> 1))) << 1);
-}
-
-constexpr uint8_t N = 2 * 2; //!< 2の累乗であること
-constexpr float InvN2 = 1.0f / (N * N);
+constexpr uint8_t N = 2 * 2; //!< 2の累乗であること (Power of 2)
+constexpr auto NN = N * N;
+constexpr float InvNN = 1.0f / NN;
 SQ15x16 ThresholdMap[N][N];
 
 auto Tone = SQ15x16(0.5f);
@@ -53,7 +22,7 @@ void setup() {
 
 	for (uint8_t i = 0; i < N; ++i) {
 		for (uint8_t j = 0; j < N; ++j) {
-			ThresholdMap[i][j] = static_cast<float>(Bayer(i, j, N)) * InvN2;
+			ThresholdMap[i][j] = static_cast<float>(Bayer(i, j, N)) * InvNN;
 		}
 	}
 }
@@ -71,7 +40,7 @@ void loop() {
 		{
 			arduboy.setCursor(0, Arduboy2::height() - 2 * (Arduboy2::getCharacterHeight() - Arduboy2::getLineSpacing()));
 			arduboy.print("Steps=");
-			arduboy.println(N * N);
+			arduboy.println(NN);
 			arduboy.print("Tone=");
 			arduboy.print(static_cast<float>(Tone));
 		}

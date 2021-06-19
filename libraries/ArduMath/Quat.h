@@ -1,18 +1,12 @@
-// Quat.h
+#ifndef _QUAT_h
+#define _QUAT_h
 
-#ifndef _Quat_h
-#define _Quat_h
-
-#if defined(ARDUINO) && ARDUINO >= 100
-	#include "arduino.h"
-#else
-	#include "WProgram.h"
-#endif
+#include "Ardu.h"
 
 #include <FixedPoints.h>
 #include <FixedPointsCommon.h>
 
-#include <Common.h>
+#include <Math.h>
 #include <Mat3.h>
 
 template<typename T = SQ7x8>
@@ -67,9 +61,11 @@ public:
 		const auto Q = Conjugate() * Quat<T>(v.X(), v.Y(), v.Z(), 0) * *this;
 		return Vec3<T>(Q.X(), Q.Y(), Q.Z());
 	}
+	// #TODO
 	//ToAxisAngle()
 
 	static constexpr Quat<T> Identity() { return { 0, 0, 0, 1 }; }
+	// #TODO
 	//static constexpr Quat<T> FromPitchYawRoll(const T& p, const T& y, const T& r) {
 	//	const auto hp = p * 0.5f;
 	//	const auto hy = y * 0.5f;

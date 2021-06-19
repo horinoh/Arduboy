@@ -4,6 +4,7 @@
 
 Arduboy2 arduboy;
 
+//!< 演算テスト用 (For calculation test)
 #define SIZE_VALUE(A, B) arduboy.print("Size="); arduboy.println(sizeof(A));\
 arduboy.print("A="); arduboy.print(static_cast<float>(A)); arduboy.print(",");\
 arduboy.print("B="); arduboy.println(static_cast<float>(B));
@@ -71,7 +72,7 @@ void loop() {
 			arduboy.setCursor(0, 0);
 			
 			constexpr UQ4x4 A = 1.5;
-			constexpr UFixed<4, 4>/*UQ4x4*/ B = 5.25;
+			constexpr UFixed<4, 4> B = 5.25; //!< UQ4x4 は UFiexed<4, 4>
 			arduboy.print("UQ4x4,");
 			SIZE_VALUE(A, B);
 			ADD_SUB(A, B);

@@ -118,8 +118,9 @@ void Draw(const Vec3<Scalar>* VB, const uint8_t* IB, const int PC)
 	}
 }
 
-constexpr uint8_t N = 2 * 2; //!< 2の累乗であること
-constexpr float InvN2 = 1.0f / (N * N);
+constexpr uint8_t N = 2 * 2; //!< 2の累乗であること (Power of 2)
+constexpr auto NN = N * N;
+constexpr float InvNN = 1.0f / NN;
 SQ15x16 ThresholdMap[N][N];
 
 uint8_t GetDither(const uint8_t x, const uint8_t y, const SQ15x16& shade) { return ThresholdMap[y % N][x % N] < shade ? 1 : 0; }
@@ -144,7 +145,7 @@ void setup() {
 
 	for (uint8_t i = 0; i < N; ++i) {
 		for (uint8_t j = 0; j < N; ++j) {
-			ThresholdMap[i][j] = static_cast<float>(Bayer(i, j, N)) * InvN2;
+			ThresholdMap[i][j] = static_cast<float>(Bayer(i, j, N)) * InvNN;
 		}
 	}
 }

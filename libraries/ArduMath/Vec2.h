@@ -1,18 +1,12 @@
-// Vec2.h
+#ifndef _VEC2_h
+#define _VEC2_h
 
-#ifndef _Vec2_h
-#define _Vec2_h
-
-#if defined(ARDUINO) && ARDUINO >= 100
-	#include "arduino.h"
-#else
-	#include "WProgram.h"
-#endif
+#include "Ardu.h"
 
 #include <FixedPoints.h>
 #include <FixedPointsCommon.h>
 
-#include <Common.h>
+#include <Math.h>
 
 template<typename T = SQ7x8>
 class Vec2

@@ -1,9 +1,3 @@
-/*
- Name:		Beep.ino
- Created:	10/10/2020 10:02:27 PM
- Author:	horin
-*/
-
 #include <Arduboy2.h>
 #include <ArduboyTonesPitches.h>
 

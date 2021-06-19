@@ -1,13 +1,7 @@
-// Mat4.h
+#ifndef _MAT4_h
+#define _MAT4_h
 
-#ifndef _Mat4_h
-#define _Mat4_h
-
-#if defined(ARDUINO) && ARDUINO >= 100
-	#include "arduino.h"
-#else
-	#include "WProgram.h"
-#endif
+#include "Ardu.h"
 
 #include <FixedPoints.h>
 #include <FixedPointsCommon.h>
@@ -85,6 +79,7 @@ public:
 			Vec4<T>::AxisW(),
 		};
 	}
+	// #TODO
 	//static constexpr Mat4<T> Perspective() {}
 	//static constexpr Mat4<T> LookAt() {}
 	//static constexpr Mat4<T> Viewport(){}

@@ -1,11 +1,9 @@
 #ifndef ARDU_MATH_H
 #define ARDU_MATH_H
 
-#if defined(ARDUINO) && ARDUINO >= 100
-	#include "arduino.h"
-#else
-	#include "WProgram.h"
-#endif
+#include "Ardu.h"
+
+#include <Bayer.h>
 
 #include <Vec2.h>
 #include <Vec3.h>

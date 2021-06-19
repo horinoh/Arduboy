@@ -1,18 +1,12 @@
-// Vec3.h
+#ifndef _VEC3_h
+#define _VEC3_h
 
-#ifndef _Vec3_h
-#define _Vec3_h
-
-#if defined(ARDUINO) && ARDUINO >= 100
-	#include "arduino.h"
-#else
-	#include "WProgram.h"
-#endif
+#include "Ardu.h"
 
 #include <FixedPoints.h>
 #include <FixedPointsCommon.h>
 
-#include <Common.h>
+#include <Math.h>
 
 template<typename T = SQ7x8>
 class Vec3

@@ -1,13 +1,7 @@
-// Mat2.h
+#ifndef _MAT2_h
+#define _MAT2_h
 
-#ifndef _Mat2_h
-#define _Mat2_h
-
-#if defined(ARDUINO) && ARDUINO >= 100
-	#include "arduino.h"
-#else
-	#include "WProgram.h"
-#endif
+#include "Ardu.h"
 
 #include <FixedPoints.h>
 #include <FixedPointsCommon.h>
